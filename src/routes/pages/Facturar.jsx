@@ -193,7 +193,7 @@ export const Facturar = () => {
 						},
 					}
 				);
-				location.reload();
+				window.location.reload();
 			}
 		}
 	);
