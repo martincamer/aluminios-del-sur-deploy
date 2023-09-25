@@ -1,15 +1,13 @@
 import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import { BuscadorPerfilSeleccionar } from '../../components/BuscadorPerfilSeleccionar';
 import { CardSeleccionAccesorio } from '../../components/CardSeleccionAccesorio';
-import 'jspdf-autotable';
-import axios from 'axios';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { PdfAccesorio } from '../../components/PdfAccesorio';
-// import { PDFDownloadLink } from '@react-pdf/renderer';
-// import { jsPDF } from 'jspdf';
-// import { PdfPerfil } from '../../components/PdfPerfil';
+import 'jspdf-autotable';
+import axios from 'axios';
 
 export const FacturarAccesorio = () => {
 	const [seleccionar, setSeleccionar] = useState(false);
@@ -39,6 +37,8 @@ export const FacturarAccesorio = () => {
 		);
 	}
 
+	console.log(accId);
+
 	//Obtener api metodo get clientes
 	useEffect(() => {
 		async function data() {
@@ -48,8 +48,6 @@ export const FacturarAccesorio = () => {
 				}/clientes-accesorios?populate=*&filters[id]=${params.id}`
 			);
 
-			// setValue('precio_herrero', res.data.data[0].attributes.precio_herrero);
-			// setValue('precio_modena', res.data.data[0].attributes.precio_modena);
 			setValue('cliente', res.data.data[0].attributes.nombre);
 
 			setClienteId(res.data.data);
@@ -82,15 +80,6 @@ export const FacturarAccesorio = () => {
 
 		load();
 	}, []);
-
-	// useEffect(() => {
-	// 	async function load() {
-	// 		const res = await axios.get(`${import.meta.env.VITE_API_URL}/perfils`);
-	// 		setPerfilCargado(res.data.data);
-	// 	}
-
-	// 	load();
-	// }, []);
 
 	//obtener get id especifica
 	useEffect(() => {
@@ -133,43 +122,44 @@ export const FacturarAccesorio = () => {
 		setValue,
 	} = useForm();
 
-	const onSubmit = handleSubmit(
-		async ({
-			total_pagar,
-			total_accesorios,
-			// barras,
-			// kilos,
-			// total_pagar,
-			// total_kilos_herrero,
-			// total_kilos_modena,
-			// precio_herrero,
-			// precio_modena,
-		}) => {
-			axios.put(
-				`${import.meta.env.VITE_API_URL}/clientes-accesorios/${params.id}`,
-				{
-					data: {
-						total_pagar: (total_pagar = totalPrecio()),
-						total_accesorios: (total_accesorios = totalAccesorios()),
-						// total_kilos_herrero: total_kilos_herrero,
-						// total_kilos_modena: total_kilos_modena,
-						// precio_herrero: precio_herrero,
-						// precio_modena: precio_modena,
-						// kilos: (kilos = total_kilos_herrero + total_kilos_modena),
-						// total_pagar: (total_pagar =
-						// 	total_kilos_herrero * precio_herrero +
-						// 	total_kilos_modena * precio_modena),
-						// barras: totalBarras(),
-					},
-				}
-			);
+	const onSubmit = handleSubmit(async ({ total_pagar, total_accesorios }) => {
+		axios.put(
+			`${import.meta.env.VITE_API_URL}/clientes-accesorios/${params.id}`,
+			{
+				data: {
+					total_pagar: (total_pagar = totalPrecio()),
+					total_accesorios: (total_accesorios = totalAccesorios()),
+				},
+			}
+		);
 
+		toast.success('Datos enviados correctamente!', {
+			position: 'top-right',
+			autoClose: 2000,
+			hideProgressBar: false,
+			closeOnClick: true,
+			pauseOnHover: true,
+			draggable: true,
+			progress: undefined,
+			theme: 'light',
+		});
+
+		setTimeout(() => {
 			location.reload();
-		}
-	);
+		}, 2000);
+	});
 
 	const onCreateAccesorioSeleccionado = handleSubmit(
-		async ({ codigo, color, categoria, cliente, precio, cantidad, nombre }) => {
+		async ({
+			codigo,
+			color,
+			categoria,
+			cliente,
+			precio,
+			cantidad,
+			nombre,
+			precio_standart,
+		}) => {
 			if (cantidad > accesorioSeleccionado[0].attributes.cantidad) {
 				setTimeout(() => {
 					setError(false);
@@ -185,6 +175,7 @@ export const FacturarAccesorio = () => {
 						precio: precio * cantidad,
 						cantidad: cantidad,
 						nombre: nombre,
+						precio_standart: precio,
 					},
 				});
 				await axios.put(
@@ -195,7 +186,21 @@ export const FacturarAccesorio = () => {
 						},
 					}
 				);
-				location.reload();
+
+				toast.success('Creado satifactoriamente!', {
+					position: 'top-right',
+					autoClose: 2000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+					theme: 'light',
+				});
+
+				setTimeout(() => {
+					location.reload();
+				}, 2000);
 			}
 		}
 	);
@@ -203,7 +208,20 @@ export const FacturarAccesorio = () => {
 	const handleDelete = id => {
 		try {
 			axios.delete(`${import.meta.env.VITE_API_URL}/acc-cargados/${id}`);
-			location.reload();
+			toast.error('Elimanado correctamente!', {
+				position: 'top-right',
+				autoClose: 2000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				theme: 'light',
+			});
+
+			setTimeout(() => {
+				location.reload();
+			}, 2000);
 		} catch (error) {
 			console.log(error);
 		}
@@ -221,10 +239,22 @@ export const FacturarAccesorio = () => {
 		}, 0);
 	};
 
-	// console.log(new Date().toLocaleDateString());
+	const clickToatFacturar = () => {
+		toast.success('Facturado correctamente!', {
+			position: 'top-right',
+			autoClose: 2000,
+			hideProgressBar: false,
+			closeOnClick: true,
+			pauseOnHover: true,
+			draggable: true,
+			progress: undefined,
+			theme: 'light',
+		});
+	};
 
 	return (
 		<div className="py-[150px] px-4">
+			<ToastContainer />
 			<div className="absolute top-28 left-10">
 				<Link
 					to={'/clientes-accesorios'}
@@ -508,8 +538,11 @@ export const FacturarAccesorio = () => {
 
 						<div className="px-0 py-3 text-center rounded-xl bg-green-600 cursor-pointer text-white  outline-none placeholder:text-black/50 hover:bg-green-700 transition-all ease-in-out w-full">
 							<PDFDownloadLink
+								onClick={() => clickToatFacturar()}
 								document={
 									<PdfAccesorio
+										// accesorioSeleccionado={accesorioSeleccionado}
+										accesorio={accesorio}
 										clienteId={clienteId}
 										accId={accId}
 									/>

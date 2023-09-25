@@ -1,8 +1,10 @@
 // import useFetch from '../../hooks/useFetch';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import axios from 'axios';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const EditarPerfil = () => {
 	const navigate = useNavigate();
@@ -26,7 +28,20 @@ export const EditarPerfil = () => {
 					categoria: categoria,
 				},
 			});
-			navigate('/perfiles');
+
+			toast.success('El cambio fue realizado satisfactoriamente!', {
+				position: 'top-right',
+				autoClose: 1500,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				theme: 'light',
+			});
+			setTimeout(() => {
+				navigate('/perfiles');
+			}, 1500);
 		}
 	);
 
@@ -96,6 +111,7 @@ export const EditarPerfil = () => {
 					Volver al inicio
 				</Link>
 			</div>
+			<ToastContainer />
 
 			<form
 				onSubmit={onSubmit}

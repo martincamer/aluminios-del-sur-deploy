@@ -49,6 +49,11 @@ export const PdfAccesorio = ({ accId, clienteId }) => {
 		// So Declarative and unDRY 👌
 		row1: {
 			width: '20%',
+			height: '100%',
+			display: 'flex',
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'center',
 			fontSize: '10px',
 			borderRight: '1px solid #000',
 			borderLeft: '1px solid #000',
@@ -58,6 +63,11 @@ export const PdfAccesorio = ({ accId, clienteId }) => {
 		},
 		row2: {
 			width: '20%',
+			height: '100%',
+			display: 'flex',
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'center',
 			fontSize: '10px',
 			borderRight: '1px solid #000',
 			paddingTop: 8,
@@ -67,6 +77,11 @@ export const PdfAccesorio = ({ accId, clienteId }) => {
 		},
 		row3: {
 			width: '20%',
+			height: '100%',
+			display: 'flex',
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'center',
 			fontSize: '10px',
 			borderRight: '1px solid #000',
 			paddingTop: 8,
@@ -75,6 +90,11 @@ export const PdfAccesorio = ({ accId, clienteId }) => {
 		},
 		row4: {
 			width: '20%',
+			height: '100%',
+			display: 'flex',
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'center',
 			fontSize: '10px',
 			paddingTop: 8,
 			borderRight: '1px solid #000',
@@ -369,7 +389,7 @@ export const PdfAccesorio = ({ accId, clienteId }) => {
 							<Text style={styles.row1}>{acc.attributes.cantidad}</Text>
 							<Text style={styles.row2}>{acc.attributes.codigo}</Text>
 							<Text style={styles.row3}>
-								${acc.attributes.precio.toLocaleString('arg')}
+								${acc.attributes.precio_standart.toLocaleString('arg')}
 							</Text>
 							<Text style={styles.row4}>{acc.attributes.categoria}</Text>
 							<Text style={styles.row4}>{acc.attributes.color}</Text>

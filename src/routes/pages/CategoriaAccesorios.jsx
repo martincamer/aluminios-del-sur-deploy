@@ -56,7 +56,7 @@ export const CategoriaAccesorios = () => {
 		<div className="flex h-full max-h-full min-h-full">
 			<SideBar />
 			<div className="px-6 flex flex-col gap-8">
-				<div className="flex flex-wrap gap-5">
+				<div className="flex flex-wrap gap-5 px-6">
 					<Link
 						to={'/accesorios/tornillos'}
 						className="font-semibold bg-primary text-white p-2 rounded-lg"
@@ -155,60 +155,68 @@ export const CategoriaAccesorios = () => {
 						placeholder="Buscar accesorio..."
 					/>
 				</div>
-				<div className="w-full grid grid-cols-4 h-full gap-5">
-					{resultado?.map(
-						accesorio =>
-							accesorio.attributes.categoria === params.categoria && (
-								<div
-									key={accesorio.id}
-									className="bg-gray-200 p-5 rounded-lg shadow-black/20 shadow-lg space-y-2 h-[300px] max-h-full flex flex-col justify-center "
-								>
-									<p className="capitalize">
-										<span className="font-bold text-black capitalize">
-											CODIGO:
-										</span>{' '}
-										{accesorio.attributes.codigo}
-									</p>
-									<p className="capitalize">
-										<span className="font-bold text-black">NOMBRE:</span>{' '}
-										{accesorio.attributes.nombre}
-									</p>
-									<p className="capitalize">
-										<span className="font-bold text-black">COLOR:</span>{' '}
-										{accesorio.attributes.color}
-									</p>
-									<p>
-										<span className="font-bold text-black">
-											CANTIDAD DE TORNILLOS:
-										</span>{' '}
-										{accesorio.attributes.cantidad}
-									</p>
-									<p>
-										<span className="font-bold text-black">
-											CANTIDAD DE PAQUETES:
-										</span>{' '}
-										{accesorio.attributes.cantidad_paquetes}
-									</p>
-									<p className="capitalize">
-										<span className="font-bold text-black">CATEGORIA:</span>{' '}
-										{accesorio.attributes.categoria}
-									</p>
-									<div className="flex justify-between gap-2">
-										<Link
-											to={`/editar-accesorio/${accesorio.id}`}
-											className="bg-primary text-white p-2 rounded-lg text-sm cursor-pointer w-full text-center"
-										>
-											Editar
-										</Link>
-										<input
-											onClick={() => handleDelete(accesorio.id)}
-											type="submit"
-											value={'Borrar'}
-											className="bg-red-500 text-white p-2 rounded-lg text-sm cursor-pointer w-full text-center"
-										/>
+				<div className="w-full grid grid-cols-4 gap-5 h-[60vh] overflow-y-scroll scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-200 px-6">
+					{resultado.length ? (
+						resultado?.map(
+							accesorio =>
+								accesorio.attributes.categoria === params.categoria && (
+									<div
+										key={accesorio.id}
+										className="bg-gray-200 p-5 rounded-lg shadow-black/20 shadow-lg space-y-2 h-[300px] max-h-full flex flex-col justify-center "
+									>
+										<p className="capitalize">
+											<span className="font-bold text-black capitalize">
+												CODIGO:
+											</span>{' '}
+											{accesorio.attributes.codigo}
+										</p>
+										<p className="capitalize">
+											<span className="font-bold text-black">NOMBRE:</span>{' '}
+											{accesorio.attributes.nombre}
+										</p>
+										<p className="capitalize">
+											<span className="font-bold text-black">COLOR:</span>{' '}
+											{accesorio.attributes.color}
+										</p>
+										<p>
+											<span className="font-bold text-black">
+												CANTIDAD DE TORNILLOS:
+											</span>{' '}
+											{accesorio.attributes.cantidad}
+										</p>
+										<p>
+											<span className="font-bold text-black">
+												CANTIDAD DE PAQUETES:
+											</span>{' '}
+											{accesorio.attributes.cantidad_paquetes}
+										</p>
+										<p className="capitalize">
+											<span className="font-bold text-black">CATEGORIA:</span>{' '}
+											{accesorio.attributes.categoria}
+										</p>
+										<div className="flex justify-between gap-2">
+											<Link
+												to={`/editar-accesorio/${accesorio.id}`}
+												className="bg-primary text-white p-2 rounded-lg text-sm cursor-pointer w-full text-center"
+											>
+												Editar
+											</Link>
+											<input
+												onClick={() => handleDelete(accesorio.id)}
+												type="submit"
+												value={'Borrar'}
+												className="bg-red-500 text-white p-2 rounded-lg text-sm cursor-pointer w-full text-center"
+											/>
+										</div>
 									</div>
-								</div>
-							)
+								)
+						)
+					) : (
+						<div className="w-full flex justify-center">
+							<span className="text-red-500 font-bold text-lg w-full">
+								No se encuentra ningun accesorio con ese nombre.
+							</span>
+						</div>
 					)}
 				</div>
 			</div>

@@ -50,10 +50,6 @@ export const Facturar = () => {
 
 			setValue('precio_herrero', res.data.data[0].attributes.precio_herrero);
 			setValue('precio_modena', res.data.data[0].attributes.precio_modena);
-			setValue(
-				'precio_modena_a30',
-				res.data.data[0].attributes.precio_modena_a30
-			);
 			setValue('cliente', res.data.data[0].attributes.nombre);
 
 			setClienteId(res.data.data);
@@ -132,10 +128,8 @@ export const Facturar = () => {
 			total_pagar,
 			total_kilos_herrero,
 			total_kilos_modena,
-			total_kilos_modena_a30,
 			precio_herrero,
 			precio_modena,
-			precio_modena_a30,
 		}) => {
 			axios.put(`${import.meta.env.VITE_API_URL}/clientes/${params.id}`, {
 				data: {
@@ -143,13 +137,10 @@ export const Facturar = () => {
 					total_kilos_modena: total_kilos_modena,
 					precio_herrero: precio_herrero,
 					precio_modena: precio_modena,
-					kilos: (kilos =
-						total_kilos_herrero + total_kilos_modena + total_kilos_modena_a30),
+					kilos: (kilos = total_kilos_herrero + total_kilos_modena),
 					total_pagar: (total_pagar =
 						total_kilos_herrero * precio_herrero +
-						total_kilos_modena * precio_modena +
-						total_kilos_modena_a30 * precio_modena_a30),
-					precio_modena_a30: precio_modena_a30,
+						total_kilos_modena * precio_modena),
 					barras: totalBarras(),
 				},
 			});
@@ -267,18 +258,10 @@ export const Facturar = () => {
 			);
 		}, 0);
 	};
-	const totalKgModenaA30 = () => {
-		return perfilId.reduce((sum, b) => {
-			return (
-				sum + Number(b.attributes.categoria == 'modena a-30' && b.attributes.kg)
-			);
-		}, 0);
-	};
 
 	useEffect(() => {
 		setValue('total_kilos_herrero', totalKgHerrero());
 		setValue('total_kilos_modena', totalKgModena());
-		setValue('total_kilos_modena_a30', totalKgModenaA30());
 	}, [totalKgHerrero, totalKgModena]);
 
 	const clickToatFacturar = () => {
@@ -620,17 +603,6 @@ export const Facturar = () => {
 						<input
 							step="0.01"
 							{...register('precio_modena', { required: true })}
-							type="number"
-							className="px-0 py-3 text-center rounded-full bg-white outline-none placeholder:text-black/50 w-auto max-md:text-sm max-md:w-[100px]"
-						/>
-					</div>
-					<div className="flex gap-3 items-center">
-						<label className="font-semibold text-normal text-white max-md:text-sm">
-							Precio de kilo modena a-30:
-						</label>
-						<input
-							step="0.01"
-							{...register('precio_modena_a30', { required: true })}
 							type="number"
 							className="px-0 py-3 text-center rounded-full bg-white outline-none placeholder:text-black/50 w-auto max-md:text-sm max-md:w-[100px]"
 						/>

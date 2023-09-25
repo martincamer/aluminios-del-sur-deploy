@@ -63,7 +63,7 @@ export const PdfPerfil = ({ perfil, clienteId }) => {
 			paddingTop: 8,
 			paddingBottom: 8,
 			textAlign: 'center',
-			textTransform: 'capitalize',
+			textTransform: 'uppercase',
 		},
 		row3: {
 			width: '20%',
@@ -386,7 +386,10 @@ export const PdfPerfil = ({ perfil, clienteId }) => {
 								fontSize: '12px',
 							}}
 						>
-							Precio Kilo Modena a-30:
+							Precio Kilo Modena a-30: $
+							{clienteId[0]?.attributes.precio_modena_a30?.toLocaleString(
+								'arg'
+							)}
 						</Text>
 						<Text
 							style={{

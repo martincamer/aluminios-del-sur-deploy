@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 
 export const CargarAccesorio = () => {
 	const [codigo, setCodigo] = useState('');
@@ -30,12 +31,26 @@ export const CargarAccesorio = () => {
 				},
 			});
 
-			navigate('/accesorios');
+			toast.success('Accesorio cargado correctamente!', {
+				position: 'top-right',
+				autoClose: 1500,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				theme: 'light',
+			});
+
+			setTimeout(() => {
+				navigate('/accesorios');
+			}, 1500);
 		}
 	};
 
 	return (
 		<div className="py-[150px] px-4">
+			<ToastContainer />
 			<div className="absolute top-28 left-10">
 				<Link
 					to={'/home'}

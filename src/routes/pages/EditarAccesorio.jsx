@@ -1,8 +1,9 @@
 // import useFetch from '../../hooks/useFetch';
+import { useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
+import axios from 'axios';
 
 export const EditarAccesorio = () => {
 	const params = useParams();
@@ -27,7 +28,21 @@ export const EditarAccesorio = () => {
 					precio: precio,
 				},
 			});
-			navigate('/accesorios');
+
+			toast.success('El cambio fue realizado satisfactoriamente!', {
+				position: 'top-right',
+				autoClose: 1500,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				theme: 'light',
+			});
+
+			setTimeout(() => {
+				navigate('/accesorios');
+			}, 1500);
 		}
 	);
 
@@ -62,6 +77,8 @@ export const EditarAccesorio = () => {
 					Volver al inicio
 				</Link>
 			</div>
+
+			<ToastContainer />
 
 			<form
 				onSubmit={onSubmit}
