@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { SideBar } from "../../components/SideBar";
 import { Link, useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 
 export const CategoriaAccesorios = () => {
@@ -48,7 +49,19 @@ export const CategoriaAccesorios = () => {
   const handleDelete = (id) => {
     try {
       axios.delete(`${import.meta.env.VITE_API_URL}/accesorios/${id}`);
-      location.reload();
+      toast.error("Perfil eliminado correctamente!", {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setTimeout(() => {
+        location.reload();
+      }, 2000);
     } catch (error) {
       console.log(error);
     }
@@ -57,6 +70,7 @@ export const CategoriaAccesorios = () => {
   return (
     <div className="flex h-full max-h-full min-h-full">
       <SideBar />
+      <ToastContainer />
       <div className="px-6 flex flex-col gap-8">
         <div className="flex flex-wrap gap-5 px-6">
           <Link
