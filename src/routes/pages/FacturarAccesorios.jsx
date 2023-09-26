@@ -325,7 +325,7 @@ export const FacturarAccesorio = () => {
                 />
               </div>
 
-              <div className="flex flex-wrap gap-4 overflow-y-scroll h-[300px]">
+              <div className="flex flex-wrap gap-4 h-[300px] overflow-y-scroll scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-200 px-6">
                 {resultado.map((a) => (
                   <CardSeleccionAccesorio
                     key={a.id}

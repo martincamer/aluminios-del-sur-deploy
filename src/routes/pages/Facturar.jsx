@@ -18,9 +18,12 @@ export const Facturar = () => {
   const [search, setSearch] = useState([]);
   const [obtenerId, setObtenerId] = useState(null);
   const [modal, setModal] = useState(false);
+  const [editarModal, setEditarModal] = useState(false);
   const [perfilSeleccionado, setPerfilSeleccionado] = useState([]);
   const [clienteId, setClienteId] = useState([]);
   const [perfilId, setPerfilId] = useState([]);
+  const [editarPerfil, setEditarPerfil] = useState([]);
+  // const [perfilSeleccionarEditar, setPerfilSeleccionadoEditar] = useState([]);
 
   const params = useParams();
 
@@ -109,6 +112,46 @@ export const Facturar = () => {
     load();
   }, [obtenerId]);
 
+  useEffect(() => {
+    async function load() {
+      const res = await axios.get(
+        `${
+          import.meta.env.VITE_API_URL
+        }/perfils?populate=*&filters[id]=${obtenerId}`
+      );
+      setEditarPerfil(res.data.data);
+
+      setValue("codigo", res.data.data[0].attributes.codigo);
+      setValue("color", res.data.data[0].attributes.color);
+      setValue("categoria", res.data.data[0].attributes.categoria);
+      setValue("barras", res.data.data[0].attributes.barras);
+      setValue("kg", res.data.data[0].attributes.kg);
+      setValue("slug", res.data.data[0].id);
+    }
+
+    load();
+  }, [obtenerId]);
+
+  // useEffect(() => {
+  //   async function load() {
+  //     if (!obtenerId) return;
+
+  //     try {
+  //       const respuesta = await axios.get(
+  //         `${import.meta.env.VITE_API_URL}/perfiles?populate=*&filters[id]=${
+  //           editarPerfil[0].attributes.slug
+  //         }`
+  //       );
+
+  //       setPerfilSeleccionadoEditar(respuesta.data.data);
+  //       console.log(perfilSeleccionarEditar);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  //   load();
+  // }, [obtenerId]);
+
   const handleModal = () => {
     setModal(!modal);
   };
@@ -182,7 +225,7 @@ export const Facturar = () => {
       cliente,
       cantidad,
     }) => {
-      if (barras > perfilSeleccionado[0].attributes.cantidad) {
+      if (barras > perfilSeleccionado[0]?.attributes?.cantidad) {
         setTimeout(() => {
           setError(false);
         }, 1400);
@@ -203,7 +246,7 @@ export const Facturar = () => {
           `${import.meta.env.VITE_API_URL}/perfiles/${obtenerId}`,
           {
             data: {
-              cantidad: perfilSeleccionado[0].attributes.cantidad - barras,
+              cantidad: perfilSeleccionado[0]?.attributes?.cantidad - barras,
             },
           }
         );
@@ -223,6 +266,54 @@ export const Facturar = () => {
         }, 1000);
       }
     }
+  );
+
+  // console.log(perfilSeleccionarEditar);
+
+  const onEditPerfilSeleccionado = handleSubmit(
+    async ({ codigo, color, categoria, barras, kg, slug, cliente }) => {
+      // if (barras > perfilSeleccionarEditar[0]?.attributes?.cantidad) {
+      //   setTimeout(() => {
+      //     setError(false);
+      //   }, 1400);
+      //   setError(true);
+      // } else {
+      await axios.put(`${import.meta.env.VITE_API_URL}/perfils/${obtenerId}`, {
+        data: {
+          codigo: codigo,
+          color: color,
+          categoria: categoria,
+          barras: barras,
+          kg: kg,
+          slug: slug,
+          cliente: cliente,
+        },
+      });
+      // await axios.put(
+      //   `${import.meta.env.VITE_API_URL}/perfiles/${obtenerId}`,
+      //   {
+      //     data: {
+      //       cantidad:
+      //         perfilSeleccionarEditar[0]?.attributes?.cantidad - barras,
+      //     },
+      //   }
+      // );
+      toast.success("Editado satifactoriamente!", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
+    }
+    // }
   );
 
   const handleDelete = (id) => {
@@ -364,7 +455,7 @@ export const Facturar = () => {
                 />
               </div>
 
-              <div className="max-md:grid-cols-2 grid grid-cols-3 gap-4 overflow-y-scroll h-[300px] max-md:h-[200px]">
+              <div className="max-md:grid-cols-2 grid grid-cols-3 gap-4  h-[300px] max-md:h-[200px] overflow-y-scroll scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-200 px-6">
                 {resultado.map((p) => (
                   <CardSeleccionPerfil
                     key={p.id}
@@ -504,6 +595,129 @@ export const Facturar = () => {
             </div>
           </div>
 
+          {editarModal && (
+            <div className="absolute top-[20%] left-[30%] flex flex-col gap-2 bg-white shadow-xl drop-shadow-2xl shadow-black/50 py-4 px-2 rounded-lg  duration-500 max-md:left-[5%] max-md:w-[90%] max-md:top-[10px]">
+              <div
+                onClick={() => setEditarModal(!editarModal)}
+                className="text-black font-bold text-[19px] px-4 flex justify-end cursor-pointer hover:text-primary transition-all ease-in-out"
+              >
+                X
+              </div>
+              <form
+                onSubmit={onEditPerfilSeleccionado}
+                className="flex flex-col gap-3 max-md:gap-1"
+              >
+                {error ? (
+                  <span className="bg-red-500 text-sm text-white p-2 rounded-lg text-center max-md:text-xs">
+                    Selecciona una cantidad menor de:{" "}
+                    {perfilSeleccionado[0].attributes.cantidad}
+                  </span>
+                ) : (
+                  ""
+                )}
+
+                <div>
+                  <label
+                    className='className="text-sm font-bold text-black capitalize max-md:text-sm'
+                    htmlFor=""
+                  >
+                    Codigo:{" "}
+                  </label>
+                  <input
+                    type="text"
+                    {...register("codigo", {
+                      required: true,
+                    })}
+                    className="font-bold text-primary capitalize bg-transparent outline-none max-md:text-sm"
+                  />
+                </div>
+                <div>
+                  <label
+                    className='className="text-sm font-bold text-black capitalize max-md:text-sm'
+                    htmlFor=""
+                  >
+                    Color:{" "}
+                  </label>
+                  <input
+                    type="text"
+                    {...register("color", {
+                      required: true,
+                    })}
+                    className="font-bold text-primary capitalize bg-transparent outline-none max-md:text-sm"
+                  />
+                </div>
+                <div>
+                  <label
+                    className='className="text-sm font-bold text-black capitalize max-md:text-sm'
+                    htmlFor=""
+                  >
+                    categoria:{" "}
+                  </label>
+                  <input
+                    type="text"
+                    {...register("categoria", {
+                      required: true,
+                    })}
+                    className="font-bold text-primary capitalize bg-transparent outline-none max-md:text-sm max-md:w-[60px]"
+                  />
+                </div>
+                <div>
+                  <label
+                    className='className="text-sm font-bold text-black capitalize max-md:text-sm'
+                    htmlFor=""
+                  >
+                    Cliente:{" "}
+                  </label>
+                  <input
+                    type="text"
+                    {...register("cliente", {
+                      required: true,
+                    })}
+                    className="font-bold text-primary capitalize bg-transparent outline-none max-md:text-sm"
+                  />
+                </div>
+                <div>
+                  <label
+                    className='className="text-sm font-bold text-black capitalize max-md:text-sm'
+                    htmlFor=""
+                  >
+                    ID:{" "}
+                  </label>
+                  <input
+                    type="number"
+                    {...register("slug", {
+                      required: true,
+                    })}
+                    className="font-bold text-primary capitalize bg-transparent outline-none max-md:text-sm"
+                  />
+                </div>
+
+                <input
+                  {...register("barras", {
+                    required: true,
+                  })}
+                  type="number"
+                  placeholder="Cantidad de barras"
+                  className="text-sm rounded-lg p-2 text-black placeholder:text-gray-900 outline-none bg-gray-200 shadow-md shadow-black/20 max-md:mb-2"
+                />
+
+                <input
+                  {...register("kg", { required: true })}
+                  type="number"
+                  step="0.01"
+                  placeholder="Cantidad de kilos"
+                  className="text-sm rounded-lg p-2 text-black placeholder:text-gray-900 outline-none bg-gray-200 shadow-md shadow-black/20 max-md:mb-2"
+                />
+
+                <input
+                  type="submit"
+                  className="bg-black text-white p-2 rounded-lg text-center outline-none cursor-pointer text-sm"
+                  value={"Editar Perfil"}
+                />
+              </form>
+            </div>
+          )}
+
           <div className="bg-white p-4 rounded-lg grid grid-cols-3 max-md:grid-cols-1 justify-items-center gap-2 overflow-y-scroll h-[200px]">
             {perfilId.map((p) => (
               <div
@@ -529,17 +743,22 @@ export const Facturar = () => {
                   </span>
                 </div>
 
-                <div className="flex flex-col justify-center items-center">
+                <div className="flex flex-col justify-center items-center gap-2">
                   <input
                     className="bg-red-500 px-3 py-2 text-white rounded-full w-[40px] h-[40px] text-sm text-center outline-none cursor-pointer max-md:text-xs"
                     value={"X"}
                     onClick={() => handleDelete(p.id)}
                   />
-                  {/* <input
-										className="bg-green-500 px-3 py-2 text-white rounded-full w-[40px] h-[40px] text-sm text-center outline-none cursor-pointer max-md:text-xs"
-										value={'E'}
-										// onClick={() => handleModal(p.id)}
-									/> */}
+                  <input
+                    className="bg-green-500 px-3 py-2 text-white rounded-full w-[40px] h-[40px] text-sm text-center outline-none cursor-pointer max-md:text-xs"
+                    value={"E"}
+                    onClick={() => {
+                      {
+                        handlePerfilSeleccionadoId(p.id),
+                          setEditarModal(!editarModal);
+                      }
+                    }}
+                  />
                 </div>
               </div>
             ))}
