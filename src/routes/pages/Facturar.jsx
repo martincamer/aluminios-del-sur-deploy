@@ -8,7 +8,6 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import { PdfPerfil } from "../../components/PdfPerfil";
 import axios from "axios";
 import "jspdf-autotable";
-// import { jsPDF } from 'jspdf';
 
 export const Facturar = () => {
   const [seleccionar, setSeleccionar] = useState(false);
@@ -23,7 +22,6 @@ export const Facturar = () => {
   const [clienteId, setClienteId] = useState([]);
   const [perfilId, setPerfilId] = useState([]);
   const [editarPerfil, setEditarPerfil] = useState([]);
-  // const [perfilSeleccionarEditar, setPerfilSeleccionadoEditar] = useState([]);
 
   const params = useParams();
 
@@ -37,8 +35,10 @@ export const Facturar = () => {
   if (!search) {
     resultado = perfil;
   } else {
-    resultado = perfil.filter((dato) =>
-      dato.attributes.codigo.toLowerCase().includes(search)
+    resultado = perfil.filter(
+      (dato) =>
+        dato.attributes.codigo.toLowerCase().includes(search) ||
+        dato.attributes.nombre.toLowerCase().includes(search.toLowerCase())
     );
   }
 
@@ -455,16 +455,24 @@ export const Facturar = () => {
                 />
               </div>
 
-              <div className="max-md:grid-cols-2 grid grid-cols-3 gap-4  h-[300px] max-md:h-[200px] overflow-y-scroll scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-200 px-6">
-                {resultado.map((p) => (
-                  <CardSeleccionPerfil
-                    key={p.id}
-                    p={p}
-                    handleModal={handleModal}
-                    handlePerfilSeleccionadoId={handlePerfilSeleccionadoId}
-                    setSeleccionar={setSeleccionar}
-                  />
-                ))}
+              <div className="max-md:grid-cols-2 grid grid-cols-3 gap-4 h-[300px] max-md:h-[200px] overflow-y-scroll scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-200 px-6">
+                {resultado.length ? (
+                  resultado.map((p) => (
+                    <CardSeleccionPerfil
+                      key={p.id}
+                      p={p}
+                      handleModal={handleModal}
+                      handlePerfilSeleccionadoId={handlePerfilSeleccionadoId}
+                      setSeleccionar={setSeleccionar}
+                    />
+                  ))
+                ) : (
+                  <div className="w-full flex justify-center">
+                    <span className="text-red-500 font-bold text-lg w-full">
+                      No se encuentra ningun perfil con ese nombre.
+                    </span>
+                  </div>
+                )}
                 {modal && (
                   <div className="absolute top-[50%] left-[30%] flex flex-col gap-2 bg-white shadow-xl drop-shadow-2xl shadow-black/50 py-4 px-2 rounded-lg  duration-500 max-md:left-[5%] max-md:w-[90%] max-md:top-[10px]">
                     <div

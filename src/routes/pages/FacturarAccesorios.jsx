@@ -32,8 +32,10 @@ export const FacturarAccesorio = () => {
   if (!search) {
     resultado = accesorio;
   } else {
-    resultado = accesorio.filter((dato) =>
-      dato.attributes.codigo.toLowerCase().includes(search)
+    resultado = accesorio.filter(
+      (dato) =>
+        dato.attributes.codigo.toLowerCase().includes(search) ||
+        dato.attributes.nombre.toLowerCase().includes(search.toLowerCase())
     );
   }
 
@@ -326,14 +328,18 @@ export const FacturarAccesorio = () => {
               </div>
 
               <div className="flex flex-wrap gap-4 h-[300px] overflow-y-scroll scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-200 px-6">
-                {resultado.map((a) => (
+                {resultado.length ? resultado.map((a) => (
                   <CardSeleccionAccesorio
                     key={a.id}
                     a={a}
                     handleModal={handleModal}
                     handlePerfilSeleccionadoId={handlePerfilSeleccionadoId}
                   />
-                ))}
+                )): <div className="w-full flex justify-center">
+                    <span className="text-red-500 font-bold text-lg w-full">
+                      No se encuentra ningun accesorio con ese nombre.
+                    </span>
+                  </div>}
                 {modal && (
                   <div className="absolute top-[40%] left-[35%] flex flex-col gap-2 bg-white shadow-xl drop-shadow-2xl shadow-black/50 py-4 px-2 rounded-lg transition-all ease-in-out duration-500">
                     <div

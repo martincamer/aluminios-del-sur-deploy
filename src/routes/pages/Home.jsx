@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { SideBar } from "../../components/SideBar";
+import { ToastContainer } from "react-toastify";
 import axios from "axios";
 
 export const Home = () => {
@@ -87,6 +88,7 @@ export const Home = () => {
   return (
     <div className="flex">
       <SideBar />
+      <ToastContainer />
       <div className="flex w-full items-center gap-20 max-md:py-[150px] max-md:px-6 flex-col">
         <div>
           <p className="text-3xl font-bold text-black">

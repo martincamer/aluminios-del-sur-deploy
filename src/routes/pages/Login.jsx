@@ -1,4 +1,5 @@
-import { Navigate, useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+
 import { Alerta } from "../../components/Alerta";
 import useAuth from "../../hooks/useAuth";
 
@@ -7,6 +8,7 @@ export const Login = () => {
 
   return (
     <div className="h-screen w-full flex justify-center items-center max-md:px-4">
+      <ToastContainer />
       <form
         onSubmit={handleSubmit}
         className="bg-primary p-10 w-1/3 mx-auto max-md:w-full max-w-full rounded-xl shadow-xl shadow-black/20 space-y-6"

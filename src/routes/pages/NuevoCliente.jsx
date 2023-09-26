@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 export const NuevoCliente = () => {
   const [nombre, setNombre] = useState("");
@@ -30,12 +31,25 @@ export const NuevoCliente = () => {
         },
       });
 
-      navigate("/clientes");
+      toast.success("Cliente creado correctamente!", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setTimeout(() => {
+        navigate("/clientes");
+      }, 2000);
     }
   };
 
   return (
     <div className="py-[150px] px-4">
+      <ToastContainer />
       <div className="absolute top-28 left-10">
         <Link to={"/home"} className="underline text-primary font-semibold">
           Volver al inicio
