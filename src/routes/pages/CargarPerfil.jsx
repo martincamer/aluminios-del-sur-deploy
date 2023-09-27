@@ -121,7 +121,12 @@ export const CargarPerfil = () => {
 							placeholder="Escribir categoria"
 						>
 							<option value="">SELECCIONAR</option>
-							<option value={'brillante'}>brillante</option>
+							<option value={'brillante tocho aluar'}>
+								brillante tocho aluar
+							</option>
+							<option value={'brillante recuperado'}>
+								brillante recuperado
+							</option>
 							<option value={'blanco ibera'}>blanco ibera</option>
 							<option value={'negro'}>negro</option>
 							<option value={'bronce'}>bronce</option>

@@ -65,42 +65,6 @@ export const EditarPerfil = () => {
 		data();
 	}, []);
 
-	// console.log(datosPerfil[0]?.attributes?.codigo);
-
-	// const [codigo, setCodigo] = useState('');
-	// const [nombre, setNombre] = useState('');
-	// const [colores, setColores] = useState('');
-	// const [cantidad, setCantidad] = useState(0);
-	// const [categoria, setCategoria] = useState('');
-	// const [error, setError] = useState(false);
-
-	// const handleSubmit = async e => {
-	// 	e.preventDefault();
-
-	// 	if ([codigo, nombre, colores, cantidad, categoria].includes('')) {
-	// 		setError(true);
-	// 	} else {
-	// 		try {
-	// 			await axios.put(
-	// 				`${import.meta.env.VITE_API_URL}/perfiles/${params.id}`,
-	// 				{
-	// 					data: {
-	// 						codigo: codigo,
-	// 						nombre: nombre,
-	// 						colores: colores,
-	// 						cantidad: cantidad,
-	// 						categoria: categoria,
-	// 					},
-	// 				}
-	// 			);
-	// 		} catch (error) {
-	// 			console.log(error);
-	// 		}
-
-	// 		navigate('/perfiles');
-	// 	}
-	// };
-
 	return (
 		<div className="py-[150px] px-4">
 			<div className="absolute top-28 left-10">
@@ -184,7 +148,12 @@ export const EditarPerfil = () => {
 							>
 								SELECCIONAR
 							</option>
-							<option value={'brillante'}>brillante</option>
+							<option value={'brillante tocho aluar'}>
+								brillante tocho aluar
+							</option>
+							<option value={'brillante recuperado'}>
+								brillante recuperado
+							</option>
 							<option value={'blanco ibera'}>blanco ibera</option>
 							<option value={'negro'}>negro</option>
 							<option value={'bronce'}>bronce</option>

@@ -8,21 +8,79 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 import { PdfPerfil } from '../../components/PdfPerfil';
 import axios from 'axios';
 import 'jspdf-autotable';
-// import { jsPDF } from 'jspdf';
 
-export const Facturar = () => {
+export const Presupuesto = () => {
 	const [seleccionar, setSeleccionar] = useState(false);
 	const [perfil, setPerfil] = useState([]);
-	const [perfilCargado, setPerfilCargado] = useState([]);
 	const [error, setError] = useState(false);
 	const [search, setSearch] = useState([]);
 	const [obtenerId, setObtenerId] = useState(null);
 	const [modal, setModal] = useState(false);
+	const [editarModal, setEditarModal] = useState(false);
 	const [perfilSeleccionado, setPerfilSeleccionado] = useState([]);
 	const [clienteId, setClienteId] = useState([]);
 	const [perfilId, setPerfilId] = useState([]);
+	const [perfilEnviado, setPerfilEnviado] = useState(
+		JSON.parse(localStorage.getItem('perfilEnviado')) ?? []
+	);
+	//create useState Formulario
+
+	// const [nombre, setNombre] = useState('');
+	const [cantidad, setCantidad] = useState(0);
+	const [kilos, setKilos] = useState(0);
+	const [codigo, setCodigo] = useState('');
+	const [colores, setColores] = useState('');
+	const [categoria, setCategoria] = useState('');
+	const [cliente, setCliente] = useState('');
+	const [totalPagar, setTotalPagar] = useState(0);
+	const [totalBarras, setTotalBarras] = useState(0);
+	const [totalKilosHerrero, setTotalKilosHerrero] = useState(0);
+	const [totalKilosModena, setTotalKilosModena] = useState(0);
+	const [totalKilosModenaA30, setTotalKilosModenaA30] = useState(0);
+	const [precioKiloHerrero, setPrecioKiloHerrero] = useState(
+		JSON.parse(localStorage.getItem('precio_kilo_herrero')) ?? 0
+	);
+	const [precioKiloModena, setPrecioKiloModena] = useState(
+		JSON.parse(localStorage.getItem('precio_kilo_modena')) ?? 0
+	);
+	const [precioKiloModenaA30, setPrecioKiloModenaA30] = useState(
+		JSON.parse(localStorage.getItem('precio_kilo_modenaA30')) ?? 0
+	);
 
 	const params = useParams();
+
+	//local storage
+	// useEffect(() => {
+	// 	const obtenerLS = () => {
+	// 		const perfilesLS =
+	// 			JSON.parse(localStorage.getItem('perfilEnviado')) ?? [];
+	// 		setPerfilEnviado(perfilesLS);
+	// 	};
+	// 	obtenerLS();
+	// }, []);
+
+	useEffect(() => {
+		localStorage.setItem('perfilEnviado', JSON.stringify(perfilEnviado));
+	}, [perfilEnviado]);
+
+	useEffect(() => {
+		localStorage.setItem(
+			'precio_kilo_herrero',
+			JSON.stringify(precioKiloHerrero)
+		);
+	}, [precioKiloHerrero]);
+	useEffect(() => {
+		localStorage.setItem(
+			'precio_kilo_modena',
+			JSON.stringify(precioKiloModena)
+		);
+	}, [precioKiloModena]);
+	useEffect(() => {
+		localStorage.setItem(
+			'precio_kilo_modenaA30',
+			JSON.stringify(precioKiloModenaA30)
+		);
+	}, [precioKiloModenaA30]);
 
 	//buscar perfil
 	const searcher = e => {
@@ -34,12 +92,15 @@ export const Facturar = () => {
 	if (!search) {
 		resultado = perfil;
 	} else {
-		resultado = perfil.filter(dato =>
-			dato.attributes.codigo.toLowerCase().includes(search)
+		resultado = perfil.filter(
+			dato =>
+				dato.attributes.codigo.toLowerCase().includes(search) ||
+				dato.attributes.nombre.toLowerCase().includes(search.toLowerCase())
 		);
 	}
 
-	//Obtener api metodo get clientes
+	// Obtener api metodo get clientes
+
 	useEffect(() => {
 		async function data() {
 			const res = await axios.get(
@@ -48,32 +109,13 @@ export const Facturar = () => {
 				}`
 			);
 
-			setValue('precio_herrero', res.data.data[0].attributes.precio_herrero);
-			setValue('precio_modena', res.data.data[0].attributes.precio_modena);
-			setValue(
-				'precio_modena_a30',
-				res.data.data[0].attributes.precio_modena_a30
-			);
-			setValue('cliente', res.data.data[0].attributes.nombre);
+			setCliente(res.data.data[0].attributes.nombre);
 
 			setClienteId(res.data.data);
 		}
 
 		data();
 	}, [obtenerId]);
-
-	useEffect(() => {
-		async function load() {
-			const res = await axios.get(
-				`${import.meta.env.VITE_API_URL}/perfils?populate=*&filters[cliente]=${
-					clienteId[0]?.attributes.nombre
-				}`
-			);
-			setPerfilId(res.data.data);
-		}
-
-		load();
-	}, [clienteId]);
 
 	//Obtener get perfiles
 	useEffect(() => {
@@ -97,11 +139,10 @@ export const Facturar = () => {
 					}/perfiles?populate=*&filters[id]=${obtenerId}`
 				);
 				setPerfilSeleccionado(respuesta.data.data);
-
-				setValue('codigo', respuesta.data.data[0].attributes.codigo);
-				setValue('color', respuesta.data.data[0].attributes.colores);
-				setValue('categoria', respuesta.data.data[0].attributes.categoria);
-				setValue('slug', respuesta.data.data[0].id);
+				setCodigo(respuesta.data.data[0].attributes.codigo);
+				setColores(respuesta.data.data[0].attributes.colores);
+				setCategoria(respuesta.data.data[0].attributes.categoria);
+				// setCodigo(respuesta.data.data[0].attributes.id);
 			} catch (error) {
 				console.log(error);
 			}
@@ -117,169 +158,58 @@ export const Facturar = () => {
 		setObtenerId(id);
 	};
 
-	//Actualizar put clientes enviar datos
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-		setValue,
-	} = useForm();
+	const addToPerfil = e => {
+		e.preventDefault();
 
-	const onSubmit = handleSubmit(
-		async ({
-			barras,
-			kilos,
-			total_pagar,
-			total_kilos_herrero,
-			total_kilos_modena,
-			total_kilos_modena_a30,
-			precio_herrero,
-			precio_modena,
-			precio_modena_a30,
-		}) => {
-			axios.put(`${import.meta.env.VITE_API_URL}/clientes/${params.id}`, {
-				data: {
-					total_kilos_herrero: total_kilos_herrero,
-					total_kilos_modena: total_kilos_modena,
-					precio_herrero: precio_herrero,
-					precio_modena: precio_modena,
-					kilos: (kilos =
-						total_kilos_herrero + total_kilos_modena + total_kilos_modena_a30),
-					total_pagar: (total_pagar =
-						total_kilos_herrero * precio_herrero +
-						total_kilos_modena * precio_modena +
-						total_kilos_modena_a30 * precio_modena_a30),
-					precio_modena_a30: precio_modena_a30,
-					barras: totalBarras(),
-				},
-			});
-
-			toast.success('Enviado correctamente ahora podes facturar!', {
-				position: 'top-right',
-				autoClose: 1000,
-				hideProgressBar: false,
-				closeOnClick: true,
-				pauseOnHover: true,
-				draggable: true,
-				progress: undefined,
-				theme: 'light',
-			});
-
-			setTimeout(() => {
-				location.reload();
-			}, 1000);
-		}
-	);
-
-	const onCreatePerfilSeleccionado = handleSubmit(
-		async ({
+		const newItem = {
+			id: perfilSeleccionado[0].id,
 			codigo,
-			color,
+			colores,
 			categoria,
-			barras,
-			kg,
-			slug,
 			cliente,
 			cantidad,
-		}) => {
-			if (barras > perfilSeleccionado[0].attributes.cantidad) {
-				setTimeout(() => {
-					setError(false);
-				}, 1400);
-				setError(true);
-			} else {
-				await axios.post(`${import.meta.env.VITE_API_URL}/perfils`, {
-					data: {
-						codigo: codigo,
-						color: color,
-						categoria: categoria,
-						barras: barras,
-						kg: kg,
-						slug: slug,
-						cliente: cliente,
-					},
-				});
-				await axios.put(
-					`${import.meta.env.VITE_API_URL}/perfiles/${obtenerId}`,
-					{
-						data: {
-							cantidad: perfilSeleccionado[0].attributes.cantidad - barras,
-						},
-					}
-				);
-				toast.success('Creado satifactoriamente!', {
-					position: 'top-right',
-					autoClose: 1000,
-					hideProgressBar: false,
-					closeOnClick: true,
-					pauseOnHover: true,
-					draggable: true,
-					progress: undefined,
-					theme: 'light',
-				});
+			kilos,
+		};
 
-				setTimeout(() => {
-					location.reload();
-				}, 1000);
-			}
-		}
-	);
+		setPerfilEnviado([...perfilEnviado, newItem]);
 
-	const handleDelete = id => {
-		try {
-			axios.delete(`${import.meta.env.VITE_API_URL}/perfils/${id}`);
-
-			toast.error('Eliminado correctamente!', {
-				position: 'top-right',
-				autoClose: 1000,
-				hideProgressBar: false,
-				closeOnClick: true,
-				pauseOnHover: true,
-				draggable: true,
-				progress: undefined,
-				theme: 'light',
-			});
-
-			setTimeout(() => {
-				location.reload();
-			}, 1000);
-		} catch (error) {
-			console.log(error);
-		}
+		handleModal(false);
+		setSeleccionar(false);
+	};
+	const addToDelete = id => {
+		const newItem = perfilEnviado.filter(item => {
+			return item.id !== id;
+		});
+		setPerfilEnviado(newItem);
 	};
 
-	const totalBarras = () => {
-		return perfilId.reduce((sum, b) => {
-			return sum + Number(b.attributes.barras);
-		}, 0);
-	};
 	const totalKgHerrero = () => {
-		return perfilId.reduce((sum, b) => {
-			return (
-				sum + Number(b.attributes.categoria == 'herrero' && b.attributes.kg)
-			);
+		return perfilEnviado.reduce((sum, b) => {
+			return sum + Number(b.categoria == 'herrero' && b.kilos);
 		}, 0);
 	};
 	const totalKgModena = () => {
-		return perfilId.reduce((sum, b) => {
-			return (
-				sum + Number(b.attributes.categoria == 'modena' && b.attributes.kg)
-			);
+		return perfilEnviado.reduce((sum, b) => {
+			return sum + Number(b.categoria == 'modena' && b.kilos);
 		}, 0);
 	};
 	const totalKgModenaA30 = () => {
-		return perfilId.reduce((sum, b) => {
-			return (
-				sum + Number(b.attributes.categoria == 'modena a-30' && b.attributes.kg)
-			);
+		return perfilEnviado.reduce((sum, b) => {
+			return sum + Number(b.categoria == 'modena a-30' && b.kilos);
 		}, 0);
 	};
 
-	useEffect(() => {
-		setValue('total_kilos_herrero', totalKgHerrero());
-		setValue('total_kilos_modena', totalKgModena());
-		setValue('total_kilos_modena_a30', totalKgModenaA30());
-	}, [totalKgHerrero, totalKgModena]);
+	const totalBarrasEnviado = () => {
+		return perfilEnviado.reduce((sum, b) => {
+			return sum + Number(b.cantidad);
+		}, 0);
+	};
+
+	const totalKilos = () => {
+		return perfilEnviado.reduce((sum, b) => {
+			return sum + Number(b.kilos);
+		}, 0);
+	};
 
 	const clickToatFacturar = () => {
 		toast.success('Facturado correctamente!', {
@@ -293,6 +223,11 @@ export const Facturar = () => {
 			theme: 'light',
 		});
 	};
+
+	const TOTALPAGAR =
+		precioKiloHerrero * totalKgHerrero() +
+		precioKiloModena * totalKgModena() +
+		precioKiloModenaA30 * totalKgModenaA30();
 
 	return (
 		<div className="py-[150px] px-2 max-md:py-[60px]">
@@ -367,16 +302,24 @@ export const Facturar = () => {
 								/>
 							</div>
 
-							<div className="max-md:grid-cols-2 grid grid-cols-3 gap-4 overflow-y-scroll h-[300px] max-md:h-[200px]">
-								{resultado.map(p => (
-									<CardSeleccionPerfil
-										key={p.id}
-										p={p}
-										handleModal={handleModal}
-										handlePerfilSeleccionadoId={handlePerfilSeleccionadoId}
-										setSeleccionar={setSeleccionar}
-									/>
-								))}
+							<div className="max-md:grid-cols-2 grid grid-cols-3 gap-4 h-[300px] max-md:h-[200px] overflow-y-scroll scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-200 px-6">
+								{resultado.length ? (
+									resultado.map(p => (
+										<CardSeleccionPerfil
+											key={p.id}
+											p={p}
+											handleModal={handleModal}
+											handlePerfilSeleccionadoId={handlePerfilSeleccionadoId}
+											setSeleccionar={setSeleccionar}
+										/>
+									))
+								) : (
+									<div className="w-full flex justify-center">
+										<span className="text-red-500 font-bold text-lg w-full">
+											No se encuentra ningun perfil con ese nombre.
+										</span>
+									</div>
+								)}
 								{modal && (
 									<div className="absolute top-[50%] left-[30%] flex flex-col gap-2 bg-white shadow-xl drop-shadow-2xl shadow-black/50 py-4 px-2 rounded-lg  duration-500 max-md:left-[5%] max-md:w-[90%] max-md:top-[10px]">
 										<div
@@ -386,7 +329,7 @@ export const Facturar = () => {
 											X
 										</div>
 										<form
-											onSubmit={onCreatePerfilSeleccionado}
+											onSubmit={addToPerfil}
 											className="flex flex-col gap-3 max-md:gap-1"
 										>
 											{error ? (
@@ -406,10 +349,9 @@ export const Facturar = () => {
 													Codigo:{' '}
 												</label>
 												<input
+													value={codigo}
+													onChange={e => setCodigo(e.target.value)}
 													type="text"
-													{...register('codigo', {
-														required: true,
-													})}
 													className="font-bold text-primary capitalize bg-transparent outline-none max-md:text-sm"
 												/>
 											</div>
@@ -421,10 +363,9 @@ export const Facturar = () => {
 													Color:{' '}
 												</label>
 												<input
+													value={colores}
+													onChange={e => setColores(e.target.value)}
 													type="text"
-													{...register('color', {
-														required: true,
-													})}
 													className="font-bold text-primary capitalize bg-transparent outline-none max-md:text-sm"
 												/>
 											</div>
@@ -436,10 +377,9 @@ export const Facturar = () => {
 													categoria:{' '}
 												</label>
 												<input
+													value={categoria}
+													onChange={e => setCategoria(e.target.value)}
 													type="text"
-													{...register('categoria', {
-														required: true,
-													})}
 													className="font-bold text-primary capitalize bg-transparent outline-none max-md:text-sm max-md:w-[60px]"
 												/>
 											</div>
@@ -451,55 +391,36 @@ export const Facturar = () => {
 													Cliente:{' '}
 												</label>
 												<input
+													value={cliente}
+													onChange={e => setCliente(e.target.value)}
 													type="text"
-													{...register('cliente', {
-														required: true,
-													})}
 													className="font-bold text-primary capitalize bg-transparent outline-none max-md:text-sm"
 												/>
 											</div>
-											<div>
-												<label
-													className='className="text-sm font-bold text-black capitalize max-md:text-sm'
-													htmlFor=""
-												>
-													ID:{' '}
-												</label>
-												<input
-													type="number"
-													{...register('slug', {
-														required: true,
-													})}
-													className="font-bold text-primary capitalize bg-transparent outline-none max-md:text-sm"
-												/>
-											</div>
-
 											<input
-												{...register('barras', {
-													required: true,
-												})}
-												// value={cantidad}
-												// onChange={e => setCantidad(e.target.value)}
+												value={cantidad}
+												onChange={e => setCantidad(e.target.value)}
 												type="number"
 												placeholder="Cantidad de barras"
 												className="text-sm rounded-lg p-2 text-black placeholder:text-gray-900 outline-none bg-gray-200 shadow-md shadow-black/20 max-md:mb-2"
 											/>
 
 											<input
-												{...register('kg', { required: true })}
-												// value={kilos}
-												// onChange={e => setKilos(e.target.value)}
+												value={kilos}
+												onChange={e => setKilos(e.target.value)}
 												type="number"
-												step="0.01"
+												step="0.001"
 												placeholder="Cantidad de kilos"
 												className="text-sm rounded-lg p-2 text-black placeholder:text-gray-900 outline-none bg-gray-200 shadow-md shadow-black/20 max-md:mb-2"
 											/>
 
-											<input
-												type="submit"
-												className="bg-black text-white p-2 rounded-lg text-center outline-none cursor-pointer text-sm"
-												value={'Enviar Perfil'}
-											/>
+											<div>
+												<input
+													type="submit"
+													className="bg-black text-white p-2 rounded-lg text-center outline-none cursor-pointer text-sm"
+													value={'Enviar Perfil'}
+												/>
+											</div>
 										</form>
 									</div>
 								)}
@@ -508,40 +429,45 @@ export const Facturar = () => {
 					</div>
 
 					<div className="bg-white p-4 rounded-lg grid grid-cols-3 max-md:grid-cols-1 justify-items-center gap-2 overflow-y-scroll h-[200px]">
-						{perfilId.map(p => (
+						{perfilEnviado.map(p => (
 							<div
 								key={p.id}
 								className="bg-primary rounded-lg flex justify-between p-4 gap-4 h-[132px] w-full shadow-md shadow-black/30"
 							>
 								<div className="grid grid-cols-2 max-md:grid-cols-2 items-center justify-center justify-items-center gap-2 w-full">
 									<span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
-										{p.attributes.barras} brs
+										{p.cantidad} brs
 									</span>
 									<span className="capitalizetext-black capitalize gap-[2px] bg-white px-1 py-1 justify-center rounded-full text-xs font-bold w-full flex items-center max-md:text-xs">
-										<span className="text-primary">Cod:</span>{' '}
-										{p.attributes.codigo}
+										<span className="text-primary">Cod:</span> {p.codigo}
 									</span>
 									<span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
-										{p.attributes.kg} kg
+										{p.kilos} kg
 									</span>
 									<span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
-										{p.attributes.color}
+										{p.colores}
 									</span>
 									<span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
-										{p.attributes.categoria}
+										{p.categoria}
 									</span>
 								</div>
 
-								<div className="flex flex-col justify-center items-center">
+								<div className="flex flex-col justify-center items-center gap-2">
 									<input
 										className="bg-red-500 px-3 py-2 text-white rounded-full w-[40px] h-[40px] text-sm text-center outline-none cursor-pointer max-md:text-xs"
 										value={'X'}
-										onClick={() => handleDelete(p.id)}
+										onClick={() => addToDelete(p.id)}
 									/>
 									{/* <input
 										className="bg-green-500 px-3 py-2 text-white rounded-full w-[40px] h-[40px] text-sm text-center outline-none cursor-pointer max-md:text-xs"
 										value={'E'}
-										// onClick={() => handleModal(p.id)}
+										onClick={() => {
+											{
+												handlePerfilSeleccionadoId(p.id),
+													handleModal(!modal),
+													setSeleccionar(!seleccionar);
+											}
+										}}
 									/> */}
 								</div>
 							</div>
@@ -551,19 +477,17 @@ export const Facturar = () => {
 
 				{/* SEPARADO */}
 
-				<form
-					onSubmit={onSubmit}
+				<div
+					// onSubmit={onSubmit}
 					className="flex flex-col space-y-6"
 				>
 					<div className="flex gap-3 items-center">
 						<label className="font-semibold text-normal text-white max-md:text-sm">
 							Total de kilos herrero:
 						</label>
-						<input
-							{...register('total_kilos_herrero', { required: true })}
-							type="text"
-							className="px-0 py-3 text-center rounded-full bg-white outline-none placeholder:text-black/50 w-auto max-md:text-sm max-md:w-[100px]"
-						/>
+						<div className="px-0 py-3 text-center w-40 rounded-full bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]">
+							{totalKgHerrero()}
+						</div>
 
 						{/* <div>{totalKgHerrero()}</div> */}
 					</div>
@@ -571,34 +495,24 @@ export const Facturar = () => {
 						<label className="font-semibold text-normal text-white max-md:text-sm">
 							Total de kilos modena:
 						</label>
-						<input
-							{...register('total_kilos_modena', { required: true })}
-							type="text"
-							className="px-0 py-3 text-center rounded-full bg-white outline-none placeholder:text-black/50 w-auto max-md:text-sm max-md:w-[100px]"
-						/>
-						{/* <div>{totalKgModena()}</div> */}
+						<div className="px-0 py-3 text-center w-40 rounded-full bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]">
+							{totalKgModena()}
+						</div>
 					</div>
 					<div className="flex gap-3 items-center">
 						<label className="font-semibold text-normal text-white max-md:text-sm">
 							Total de kilos modena a-30:
 						</label>
-						<input
-							{...register('total_kilos_modena_a30', { required: true })}
-							type="text"
-							className="px-0 py-3 text-center rounded-full bg-white outline-none placeholder:text-black/50 w-auto max-md:text-sm max-md:w-[100px]"
-						/>
-						{/* <div>{totalKgModena()}</div> */}
+						<div className="px-0 py-3 text-center w-40 rounded-full bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]">
+							{totalKgModenaA30()}
+						</div>
 					</div>
 					<div className="flex gap-3 items-center">
 						<label className="font-semibold text-normal text-white max-md:text-sm">
 							Total de barra perfiles:
 						</label>
-						<div className="px-0 text-center rounded-full bg-white w-[200px] py-3 max-md:text-sm max-md:w-[100px]">
-							{/* {totalBarras()} */}
-							{(clienteId[0]?.attributes.nombre ===
-								perfilId[0]?.attributes?.cliente &&
-								totalBarras()) ||
-								0}
+						<div className="px-0 text-center rounded-full bg-white w-40 py-3 max-md:text-sm max-md:w-[100px]">
+							{totalBarrasEnviado()}
 						</div>
 					</div>
 
@@ -607,8 +521,9 @@ export const Facturar = () => {
 							Precio de kilo herrero:
 						</label>
 						<input
-							step="0.01"
-							{...register('precio_herrero', { required: true })}
+							value={precioKiloHerrero}
+							onChange={e => setPrecioKiloHerrero(e.target.value)}
+							step="0.001"
 							type="number"
 							className="px-0 py-3 text-center rounded-full bg-white outline-none placeholder:text-black/50 w-auto max-md:text-sm max-md:w-[100px]"
 						/>
@@ -618,8 +533,9 @@ export const Facturar = () => {
 							Precio de kilo modena:
 						</label>
 						<input
-							step="0.01"
-							{...register('precio_modena', { required: true })}
+							value={precioKiloModena}
+							onChange={e => setPrecioKiloModena(e.target.value)}
+							step="0.001"
 							type="number"
 							className="px-0 py-3 text-center rounded-full bg-white outline-none placeholder:text-black/50 w-auto max-md:text-sm max-md:w-[100px]"
 						/>
@@ -629,46 +545,54 @@ export const Facturar = () => {
 							Precio de kilo modena a-30:
 						</label>
 						<input
-							step="0.01"
-							{...register('precio_modena_a30', { required: true })}
+							value={precioKiloModenaA30}
+							onChange={e => setPrecioKiloModenaA30(e.target.value)}
+							step="0.001"
 							type="number"
 							className="px-0 py-3 text-center rounded-full bg-white outline-none placeholder:text-black/50 w-auto max-md:text-sm max-md:w-[100px]"
 						/>
 					</div>
+					{/* <div className="flex gap-3 items-center">
+						<label className="font-semibold text-normal text-white max-md:text-sm">
+							Seleccionar Fecha:
+						</label>
+						<input
+							type="date"
+							className="px-6 py-3 rounded-lg bg-white outline-none placeholder:text-black/60 w-auto"
+						/>
+					</div> */}
 					<div className="flex gap-3 items-center">
 						<label className="font-semibold text-normal text-white max-md:text-sm">
 							Total a pagar:
 						</label>
 
 						<div className="text-white bg-green-600 py-2 px-5 rounded-xl text-xl max-md:text-base font-bold">
-							$ {clienteId[0]?.attributes.total_pagar.toLocaleString('arg')}
+							${TOTALPAGAR.toLocaleString('arg')}
 						</div>
 					</div>
 					<div className="flex gap-3">
-						<div className="flex gap-3 w-full">
-							<input
-								type="submit"
-								className="px-0 py-3 text-center rounded-xl bg-orange-500 cursor-pointer text-white  outline-none placeholder:text-black/50 w-full hover:bg-orange-600 transition-all ease-in-out max-md:text-xs"
-								value={'ENVIAR'}
-							/>
-						</div>
-
 						<div className="px-0 py-3 text-center rounded-xl bg-green-600 cursor-pointer text-white  outline-none placeholder:text-black/50 w-full hover:bg-green-700 transition-all ease-in-out max-md:text-xs">
 							<PDFDownloadLink
 								onClick={() => clickToatFacturar()}
 								document={
 									<PdfPerfil
+										TOTALPAGAR={TOTALPAGAR}
+										totalKilos={totalKilos}
+										precioKiloHerrero={precioKiloHerrero}
+										precioKiloModena={precioKiloModena}
+										precioKiloModenaA30={precioKiloModenaA30}
+										perfilEnviado={perfilEnviado}
 										clienteId={clienteId}
 										perfil={perfilId}
 									/>
 								}
 								fileName={`${clienteId[0]?.attributes.nombre}_${clienteId[0]?.attributes.apellido}`}
 							>
-								FACTURAR
+								GENERAR PRESUPUESTO FACTURACIÓN
 							</PDFDownloadLink>
 						</div>
 					</div>
-				</form>
+				</div>
 			</div>
 		</div>
 	);
