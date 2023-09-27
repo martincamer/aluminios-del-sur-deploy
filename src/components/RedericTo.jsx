@@ -1,9 +1,9 @@
-import { Navigate } from "react-router-dom";
+import { Navigate } from 'react-router-dom';
 
 export const RederictTo = ({ children }) => {
-  if (localStorage.key("email")) {
-    return <Navigate to={"/home"} />;
-  }
+	if (localStorage.getItem('email')) {
+		return <Navigate to={'/home'} />;
+	}
 
-  return children;
+	return children;
 };
