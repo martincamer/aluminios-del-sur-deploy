@@ -49,18 +49,6 @@ export const Facturar = () => {
 		// getValues,
 	} = useForm();
 
-	// const kgHerreroPrueba = getValues('total_kilos_herrero');
-	// const PrecioHerreroPrueba = getValues('precio_herrero');
-	// const PrecioModenaPrueba = getValues('precio_modena');
-	// const kgModenaPrueba = getValues('total_kilos_modena');
-	// const PrecioModenaA30Prueba = getValues('precio_modena_a30');
-	// const kgModenaA30Prueba = getValues('total_kilos_modena_a30');
-
-	// const totalPruebaHerrero =
-	// 	PrecioHerreroPrueba * kgHerreroPrueba +
-	// 	PrecioModenaPrueba * kgModenaPrueba +
-	// 	PrecioModenaA30Prueba * kgModenaA30Prueba;
-
 	//Obtener api metodo get clientes
 	useEffect(() => {
 		async function data() {

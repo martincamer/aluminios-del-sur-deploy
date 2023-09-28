@@ -11,7 +11,19 @@ import img from '../assets/icons8-whatsapp-50.png';
 import imgtwo from '../assets/icons8-enviar-50.png';
 import imgtree from '../assets/icons8-google-maps-50.png';
 
-export const PdfPerfil = ({ perfil, clienteId }) => {
+export const PdfPerfilPresupusto = ({
+	TOTALPAGAR,
+	totalKilos,
+	precioKiloHerrero,
+	precioKiloModena,
+	precioKiloModenaA30,
+	perfilEnviado,
+	clienteId,
+}) => {
+	function getRandomInt(max) {
+		return Math.floor(Math.random() * max);
+	}
+
 	const styles = StyleSheet.create({
 		table: {
 			margin: '0 auto',
@@ -237,7 +249,9 @@ export const PdfPerfil = ({ perfil, clienteId }) => {
 								marginBottom: '6px',
 							}}
 						>
-							<Text>NUMERO: {clienteId[0]?.id}</Text>
+							<Text>
+								NUMERO: {/*clienteId[0]?.id */} {'#' + getRandomInt(10000)}
+							</Text>
 						</View>
 						<View
 							style={{
@@ -344,16 +358,16 @@ export const PdfPerfil = ({ perfil, clienteId }) => {
 					</View>
 
 					{/* <View style={{ display: 'flex', justifyContent: 'center' }}> */}
-					{perfil?.map(p => (
+					{perfilEnviado?.map(p => (
 						<View
 							key={p.id}
 							style={styles.row}
 						>
-							<Text style={styles.row1}>{p.attributes.barras}</Text>
-							<Text style={styles.row2}>{p.attributes.codigo}</Text>
-							<Text style={styles.row3}>{p.attributes.kg}</Text>
-							<Text style={styles.row4}>{p.attributes.categoria}</Text>
-							<Text style={styles.row4}>{p.attributes.color}</Text>
+							<Text style={styles.row1}>{p.cantidad}</Text>
+							<Text style={styles.row2}>{p.codigo}</Text>
+							<Text style={styles.row3}>{p.kilos}</Text>
+							<Text style={styles.row4}>{p.categoria}</Text>
+							<Text style={styles.row4}>{p.colores}</Text>
 						</View>
 					))}
 				</View>
@@ -370,16 +384,14 @@ export const PdfPerfil = ({ perfil, clienteId }) => {
 								fontSize: '12px',
 							}}
 						>
-							Precio Kilo Herrero: $
-							{clienteId[0]?.attributes.precio_herrero?.toLocaleString('arg')}
+							Precio Kilo Herrero: ${precioKiloHerrero.toLocaleString('arg')}
 						</Text>
 						<Text
 							style={{
 								fontSize: '12px',
 							}}
 						>
-							Precio Kilo Modena: $
-							{clienteId[0]?.attributes.precio_modena?.toLocaleString('arg')}
+							Precio Kilo Modena: ${precioKiloModena.toLocaleString('arg')}
 						</Text>
 						<Text
 							style={{
@@ -387,16 +399,14 @@ export const PdfPerfil = ({ perfil, clienteId }) => {
 							}}
 						>
 							Precio Kilo Modena a-30: $
-							{clienteId[0]?.attributes.precio_modena_a30?.toLocaleString(
-								'arg'
-							)}
+							{precioKiloModenaA30.toLocaleString('arg')}
 						</Text>
 						<Text
 							style={{
 								fontSize: '12px',
 							}}
 						>
-							Total de Kilos: {clienteId[0]?.attributes.kilos} kg
+							Total de Kilos: {totalKilos()} kg
 						</Text>
 						{/* <Text
 							style={{
@@ -420,8 +430,7 @@ export const PdfPerfil = ({ perfil, clienteId }) => {
 								fontSize: '12px',
 							}}
 						>
-							Total a pagar: $
-							{clienteId[0]?.attributes.total_pagar?.toLocaleString('arg')}
+							Total a pagar: ${TOTALPAGAR.toLocaleString('arg')}
 						</Text>
 					</View>
 				</View>
