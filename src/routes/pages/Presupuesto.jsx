@@ -110,7 +110,11 @@ export const Presupuesto = () => {
   //Obtener get perfiles
   useEffect(() => {
     async function load() {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/perfiles`);
+      const res = await axios.get(
+        `${
+          import.meta.env.VITE_API_URL
+        }/perfiles?pagination[start]=0&pagination[limit]=1000`
+      );
       setPerfil(res.data.data);
     }
 
@@ -403,43 +407,42 @@ export const Presupuesto = () => {
                         className="text-sm rounded-lg p-2 text-black placeholder:text-gray-900 outline-none bg-gray-200 shadow-md shadow-black/20 max-md:mb-2"
                       />
 
-											<div>
-												<input
-													type="submit"
-													className="bg-black text-white p-2 rounded-lg text-center outline-none cursor-pointer text-sm"
-													value={'Enviar Perfil'}
-												/>
-											</div>
-										</form>
-									</div>
-								)}
-							</div>
-						</div>
-					</div>
-					<div className="bg-white p-4 rounded-lg grid grid-cols-3 max-md:grid-cols-1 justify-items-center gap-2 overflow-y-scroll h-[200px]">
-						{
-							perfilEnviado.map(p => (
-								<div
-									key={p.id}
-									className="bg-primary rounded-lg flex justify-between p-4 gap-4 h-[132px] w-full shadow-md shadow-black/30"
-								>
-									<div className="grid grid-cols-2 max-md:grid-cols-2 items-center justify-center justify-items-center gap-2 w-full">
-										<span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
-											{p.cantidad} brs
-										</span>
-										<span className="capitalizetext-black capitalize gap-[2px] bg-white px-1 py-1 justify-center rounded-full text-xs font-bold w-full flex items-center max-md:text-xs">
-											<span className="text-primary">Cod:</span> {p.codigo}
-										</span>
-										<span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
-											{p.kilos} kg
-										</span>
-										<span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
-											{p.colores}
-										</span>
-										<span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
-											{p.categoria}
-										</span>
-									</div>
+                      <div>
+                        <input
+                          type="submit"
+                          className="bg-black text-white p-2 rounded-lg text-center outline-none cursor-pointer text-sm"
+                          value={"Enviar Perfil"}
+                        />
+                      </div>
+                    </form>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg grid grid-cols-3 max-md:grid-cols-1 justify-items-center gap-2 overflow-y-scroll h-[200px]">
+            {perfilEnviado.map((p) => (
+              <div
+                key={p.id}
+                className="bg-primary rounded-lg flex justify-between p-4 gap-4 h-[132px] w-full shadow-md shadow-black/30"
+              >
+                <div className="grid grid-cols-2 max-md:grid-cols-2 items-center justify-center justify-items-center gap-2 w-full">
+                  <span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
+                    {p.cantidad} brs
+                  </span>
+                  <span className="capitalizetext-black capitalize gap-[2px] bg-white px-1 py-1 justify-center rounded-full text-xs font-bold w-full flex items-center max-md:text-xs">
+                    <span className="text-primary">Cod:</span> {p.codigo}
+                  </span>
+                  <span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
+                    {p.kilos} kg
+                  </span>
+                  <span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
+                    {p.colores}
+                  </span>
+                  <span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
+                    {p.categoria}
+                  </span>
+                </div>
 
                 <div className="flex flex-col justify-center items-center gap-2">
                   <input
@@ -466,52 +469,44 @@ export const Presupuesto = () => {
 
         {/* SEPARADO */}
 
-				<div
-					// onSubmit={onSubmit}
-					className="flex flex-col space-y-6"
-				>
-					<div className="flex gap-3 items-center">
-						<label className="font-semibold text-normal text-white max-md:text-sm">
-							Total de kilos herrero:
-						</label>
-						<div className="px-0 py-3 text-center w-40 rounded-full bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]">
-							{
-								totalKgHerrero() ||
-								0}
-						</div>
+        <div
+          // onSubmit={onSubmit}
+          className="flex flex-col space-y-6"
+        >
+          <div className="flex gap-3 items-center">
+            <label className="font-semibold text-normal text-white max-md:text-sm">
+              Total de kilos herrero:
+            </label>
+            <div className="px-0 py-3 text-center w-40 rounded-full bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]">
+              {totalKgHerrero() || 0}
+            </div>
 
-						{/* <div>{totalKgHerrero()}</div> */}
-					</div>
-					<div className="flex gap-3 items-center">
-						<label className="font-semibold text-normal text-white max-md:text-sm">
-							Total de kilos modena:
-						</label>
-						<div className="px-0 py-3 text-center w-40 rounded-full bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]">
-							{
-								totalKgModena() ||
-								0}
-						</div>
-					</div>
-					<div className="flex gap-3 items-center">
-						<label className="font-semibold text-normal text-white max-md:text-sm">
-							Total de kilos modena a-30:
-						</label>
-						<div className="px-0 py-3 text-center w-40 rounded-full bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]">
-							{
-								totalKgModenaA30() ||
-								0}
-						</div>
-					</div>
-					<div className="flex gap-3 items-center">
-						<label className="font-semibold text-normal text-white max-md:text-sm">
-							Total de barra perfiles:
-						</label>
-						<div className="px-0 text-center rounded-full bg-white w-40 py-3 max-md:text-sm max-md:w-[100px]">
-							{
-								totalBarrasEnviado() ||
-								0}
-						</div>
-					</div>
+            {/* <div>{totalKgHerrero()}</div> */}
+          </div>
+          <div className="flex gap-3 items-center">
+            <label className="font-semibold text-normal text-white max-md:text-sm">
+              Total de kilos modena:
+            </label>
+            <div className="px-0 py-3 text-center w-40 rounded-full bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]">
+              {totalKgModena() || 0}
+            </div>
+          </div>
+          <div className="flex gap-3 items-center">
+            <label className="font-semibold text-normal text-white max-md:text-sm">
+              Total de kilos modena a-30:
+            </label>
+            <div className="px-0 py-3 text-center w-40 rounded-full bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]">
+              {totalKgModenaA30() || 0}
+            </div>
+          </div>
+          <div className="flex gap-3 items-center">
+            <label className="font-semibold text-normal text-white max-md:text-sm">
+              Total de barra perfiles:
+            </label>
+            <div className="px-0 text-center rounded-full bg-white w-40 py-3 max-md:text-sm max-md:w-[100px]">
+              {totalBarrasEnviado() || 0}
+            </div>
+          </div>
 
           <div className="flex gap-3 items-center">
             <label className="font-semibold text-normal text-white max-md:text-sm">
@@ -566,37 +561,34 @@ export const Presupuesto = () => {
               Total a pagar:
             </label>
 
-						<div className="text-white bg-green-600 py-2 px-5 rounded-xl text-xl max-md:text-base font-bold">
-							$
-							{
-								TOTALPAGAR.toLocaleString('arg') ||
-								0}
-						</div>
-					</div>
-					<div className="flex gap-3">
-						<div className="px-0 py-3 text-center rounded-xl bg-green-600 cursor-pointer text-white  outline-none placeholder:text-black/50 w-full hover:bg-green-700 transition-all ease-in-out max-md:text-xs">
-							<PDFDownloadLink
-								onClick={() => clickToatFacturar()}
-								document={
-									<PdfPerfilPresupusto
-										TOTALPAGAR={TOTALPAGAR}
-										totalKilos={totalKilos}
-										precioKiloHerrero={precioKiloHerrero}
-										precioKiloModena={precioKiloModena}
-										precioKiloModenaA30={precioKiloModenaA30}
-										perfilEnviado={perfilEnviado}
-										clienteId={clienteId}
-										perfil={perfilId}
-									/>
-								}
-								fileName={`${clienteId[0]?.attributes.nombre}_${clienteId[0]?.attributes.apellido}`}
-							>
-								GENERAR PRESUPUESTO FACTURACIÓN
-							</PDFDownloadLink>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	);
+            <div className="text-white bg-green-600 py-2 px-5 rounded-xl text-xl max-md:text-base font-bold">
+              ${TOTALPAGAR.toLocaleString("arg") || 0}
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <div className="px-0 py-3 text-center rounded-xl bg-green-600 cursor-pointer text-white  outline-none placeholder:text-black/50 w-full hover:bg-green-700 transition-all ease-in-out max-md:text-xs">
+              <PDFDownloadLink
+                onClick={() => clickToatFacturar()}
+                document={
+                  <PdfPerfilPresupusto
+                    TOTALPAGAR={TOTALPAGAR}
+                    totalKilos={totalKilos}
+                    precioKiloHerrero={precioKiloHerrero}
+                    precioKiloModena={precioKiloModena}
+                    precioKiloModenaA30={precioKiloModenaA30}
+                    perfilEnviado={perfilEnviado}
+                    clienteId={clienteId}
+                    perfil={perfilId}
+                  />
+                }
+                fileName={`${clienteId[0]?.attributes.nombre}_${clienteId[0]?.attributes.apellido}`}
+              >
+                GENERAR PRESUPUESTO FACTURACIÓN
+              </PDFDownloadLink>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };

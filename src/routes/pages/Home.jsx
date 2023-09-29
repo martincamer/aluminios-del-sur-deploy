@@ -6,13 +6,11 @@ import axios from "axios";
 export const Home = () => {
   const [usuario, setUsuario] = useState([]);
   const [perfil, setPerfil] = useState([]);
-  const [perfilCargado, setPerfilCargado] = useState([]);
   const [clientes, setClientes] = useState([]);
 
   useEffect(() => {
     async function loadData() {
       const res = await axios.get(`${import.meta.env.VITE_API_URL}/usuarios`);
-      console.log(res.data.data);
       setUsuario(res.data.data);
     }
 
@@ -21,8 +19,11 @@ export const Home = () => {
 
   useEffect(() => {
     async function loadData() {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/perfiles`);
-      console.log(res.data.data);
+      const res = await axios.get(
+        `${
+          import.meta.env.VITE_API_URL
+        }/perfiles?pagination[start]=0&pagination[limit]=1000`
+      );
       setPerfil(res.data.data);
     }
 
@@ -31,17 +32,11 @@ export const Home = () => {
 
   useEffect(() => {
     async function loadData() {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/perfils`);
-      console.log(res.data.data);
-      setPerfilCargado(res.data.data);
-    }
-
-    loadData();
-  }, []);
-  useEffect(() => {
-    async function loadData() {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/clientes`);
-      console.log(res.data.data);
+      const res = await axios.get(
+        `${
+          import.meta.env.VITE_API_URL
+        }/clientes?pagination[start]=0&pagination[limit]=1000`
+      );
       setClientes(res.data.data);
     }
 
@@ -80,8 +75,8 @@ export const Home = () => {
     }, 0);
   };
   const totalPerfilesVendidos = () => {
-    return perfilCargado.reduce((sum, p) => {
-      return sum + Number(p.attributes.barras);
+    return clientes.reduce((sum, p) => {
+      return sum + Number(p.attributes.barras_compradas);
     }, 0);
   };
 

@@ -11,8 +11,13 @@ export const Perfiles = () => {
   useEffect(() => {
     async function loadData() {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/perfiles`);
+        const res = await axios.get(
+          `${
+            import.meta.env.VITE_API_URL
+          }/perfiles?pagination[start]=0&pagination[limit]=1000`
+        );
         setDatos(res.data.data);
+        console.log(datos);
       } catch (error) {
         console.log(error);
       }
