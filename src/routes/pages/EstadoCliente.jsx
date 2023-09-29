@@ -21,17 +21,22 @@ export const EstadoCliente = () => {
 		loadData();
 	}, []);
 
-	const onSubmit = (id, total_pagar, entrega, fecha_pago, pago_confirmado) => {
+	// console.log(datos)
+
+	const onSubmit = (id, total_pagar, entrega, fecha_pago, pago_confirmado,kilos,barras) => {
 		try {
+
 			axios.put(`${import.meta.env.VITE_API_URL}/clientes/${id}`, {
 				data: {
 					total_pagar: 0,
 					entrega: 0,
+					kilos: 0,
+					barras: 0,
 					fecha_pago: null,
 					pago_confirmado: false,
 				},
 			});
-
+			
 			toast.error('Reseteado correctamente!', {
 				position: 'top-right',
 				autoClose: 1000,
@@ -50,8 +55,6 @@ export const EstadoCliente = () => {
 			console.log(error);
 		}
 	};
-
-	let resultado = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 	return (
 		<div className="flex h-full max-h-full min-h-full">

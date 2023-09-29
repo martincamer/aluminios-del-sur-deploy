@@ -91,9 +91,9 @@ export const Clientes = () => {
 											{i.attributes.barras}
 										</th>
 										<th className="text-xs p-2 text-white border-r-[2px] border-black">
-											{i.attributes.total_kilos_herrero +
+											{/* {i.attributes.total_kilos_herrero +
 												i.attributes.total_kilos_modena +
-												i.attributes.total_kilos_modena_a30}
+												i.attributes.total_kilos_modena_a30} */} {i.attributes.kilos}
 										</th>
 										<th className="text-xs p-2 text-white border-r-[2px] border-black">
 											{i.attributes.localidad}
