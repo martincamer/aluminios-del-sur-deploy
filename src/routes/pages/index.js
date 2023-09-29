@@ -20,3 +20,4 @@ export * from './NotFound';
 export * from './EstadoCliente';
 export * from './EditarEstadoCliente';
 export * from './Presupuesto';
+export * from './EditarCliente';

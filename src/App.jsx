@@ -25,6 +25,7 @@ import {
 	EstadoCliente,
 	EditarEstadoCliente,
 	Presupuesto,
+	EditarCliente,
 	// OlvidePassword,
 	// Register,
 } from './routes/pages';
@@ -194,6 +195,14 @@ const router = createBrowserRouter([
 				element: (
 					<ProtectedRoute>
 						<Presupuesto />
+					</ProtectedRoute>
+				),
+			},
+			{
+				path: '/editar-cliente-perfiles/:id',
+				element: (
+					<ProtectedRoute>
+						<EditarCliente />
 					</ProtectedRoute>
 				),
 			},

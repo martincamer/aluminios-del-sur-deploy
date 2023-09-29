@@ -149,8 +149,8 @@ export const EstadoCliente = () => {
 														Estado Pago Realizado
 													</p>
 												) : (
-													<p className="bg-red-500 text-white p-2 rounded-lg text-sm cursor-pointer">
-														Estado Pendiente
+													<p className={`${i.attributes.total_pagar === 0 ? 'bg-orange-500' : 'bg-red-500'} text-white p-2 rounded-lg text-sm cursor-pointer`}>
+														{i.attributes.total_pagar === 0 ? 'No hay nada a cargar' : 'Estado Pendiente'}
 													</p>
 												)}
 											</div>

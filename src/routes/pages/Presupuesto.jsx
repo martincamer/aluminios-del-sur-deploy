@@ -385,6 +385,7 @@ export const Presupuesto = () => {
                         />
                       </div>
                       <input
+                        min="1"
                         value={cantidad}
                         onChange={(e) => setCantidad(e.target.value)}
                         type="number"
@@ -393,6 +394,7 @@ export const Presupuesto = () => {
                       />
 
                       <input
+                        min="1"
                         value={kilos}
                         onChange={(e) => setKilos(e.target.value)}
                         type="number"
@@ -516,6 +518,7 @@ export const Presupuesto = () => {
               Precio de kilo herrero:
             </label>
             <input
+              min="1"
               value={precioKiloHerrero}
               onChange={(e) => setPrecioKiloHerrero(e.target.value)}
               step="0.001"
@@ -528,6 +531,7 @@ export const Presupuesto = () => {
               Precio de kilo modena:
             </label>
             <input
+              min="1"
               value={precioKiloModena}
               onChange={(e) => setPrecioKiloModena(e.target.value)}
               step="0.001"
@@ -540,6 +544,7 @@ export const Presupuesto = () => {
               Precio de kilo modena a-30:
             </label>
             <input
+              min="1"
               value={precioKiloModenaA30}
               onChange={(e) => setPrecioKiloModenaA30(e.target.value)}
               step="0.001"

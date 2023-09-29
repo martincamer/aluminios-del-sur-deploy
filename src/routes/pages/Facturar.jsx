@@ -58,14 +58,14 @@ export const Facturar = () => {
 				}`
 			);
 
-			setValue('precio_herrero', res.data.data[0].attributes.precio_herrero);
-			setValue('precio_modena', res.data.data[0].attributes.precio_modena);
+			setValue('precio_herrero', res.data.data[0].attributes.precio_herrero || 0);
+			setValue('precio_modena', res.data.data[0].attributes.precio_modena || 0);
 			setValue(
 				'precio_modena_a30',
-				res.data.data[0].attributes.precio_modena_a30
+				res.data.data[0].attributes.precio_modena_a30 || 0
 			);
-			setValue('cliente', res.data.data[0].attributes.nombre);
-			setValue('fecha_pago', res.data.data[0].attributes.fecha_pago);
+			setValue('cliente', res.data.data[0].attributes.nombre || 'No se encontro el cliente');
+			setValue('fecha_pago', res.data.data[0].attributes.fecha_pago || '2017-06-01');
 			setClienteId(res.data.data);
 		}
 
