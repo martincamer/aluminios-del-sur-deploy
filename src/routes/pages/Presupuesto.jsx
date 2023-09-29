@@ -414,11 +414,8 @@ export const Presupuesto = () => {
 							</div>
 						</div>
 					</div>
-
-					{console.log(perfilEnviado)}
-
 					<div className="bg-white p-4 rounded-lg grid grid-cols-3 max-md:grid-cols-1 justify-items-center gap-2 overflow-y-scroll h-[200px]">
-						{clienteId[0]?.attributes.nombre === perfilEnviado[0].cliente &&
+						{
 							perfilEnviado.map(p => (
 								<div
 									key={p.id}
@@ -476,8 +473,8 @@ export const Presupuesto = () => {
 							Total de kilos herrero:
 						</label>
 						<div className="px-0 py-3 text-center w-40 rounded-full bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]">
-							{(clienteId[0]?.attributes.nombre === perfilEnviado[0]?.cliente &&
-								totalKgHerrero()) ||
+							{
+								totalKgHerrero() ||
 								0}
 						</div>
 
@@ -488,8 +485,8 @@ export const Presupuesto = () => {
 							Total de kilos modena:
 						</label>
 						<div className="px-0 py-3 text-center w-40 rounded-full bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]">
-							{(clienteId[0]?.attributes.nombre === perfilEnviado[0]?.cliente &&
-								totalKgModena()) ||
+							{
+								totalKgModena() ||
 								0}
 						</div>
 					</div>
@@ -498,8 +495,8 @@ export const Presupuesto = () => {
 							Total de kilos modena a-30:
 						</label>
 						<div className="px-0 py-3 text-center w-40 rounded-full bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]">
-							{(clienteId[0]?.attributes.nombre === perfilEnviado[0]?.cliente &&
-								totalKgModenaA30()) ||
+							{
+								totalKgModenaA30() ||
 								0}
 						</div>
 					</div>
@@ -508,8 +505,8 @@ export const Presupuesto = () => {
 							Total de barra perfiles:
 						</label>
 						<div className="px-0 text-center rounded-full bg-white w-40 py-3 max-md:text-sm max-md:w-[100px]">
-							{(clienteId[0]?.attributes.nombre === perfilEnviado[0]?.cliente &&
-								totalBarrasEnviado()) ||
+							{
+								totalBarrasEnviado() ||
 								0}
 						</div>
 					</div>
@@ -566,8 +563,8 @@ export const Presupuesto = () => {
 
 						<div className="text-white bg-green-600 py-2 px-5 rounded-xl text-xl max-md:text-base font-bold">
 							$
-							{(clienteId[0]?.attributes.nombre === perfilEnviado[0]?.cliente &&
-								TOTALPAGAR.toLocaleString('arg')) ||
+							{
+								TOTALPAGAR.toLocaleString('arg') ||
 								0}
 						</div>
 					</div>
