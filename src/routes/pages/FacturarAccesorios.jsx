@@ -76,7 +76,11 @@ export const FacturarAccesorio = () => {
   //Obtener get perfiles
   useEffect(() => {
     async function load() {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/accesorios`);
+      const res = await axios.get(
+        `${
+          import.meta.env.VITE_API_URL
+        }/accesorios?pagination[start]=0&pagination[limit]=1000`
+      );
       setAccesorio(res.data.data);
     }
 
@@ -168,18 +172,23 @@ export const FacturarAccesorio = () => {
         }, 1400);
         setError(true);
       } else {
-        await axios.post(`${import.meta.env.VITE_API_URL}/acc-cargados`, {
-          data: {
-            codigo: codigo,
-            color: color,
-            categoria: categoria,
-            cliente: cliente,
-            precio: precio * cantidad,
-            cantidad: cantidad,
-            nombre: nombre,
-            precio_standart: precio,
-          },
-        });
+        await axios.post(
+          `${
+            import.meta.env.VITE_API_URL
+          }/acc-cargados?pagination[start]=0&pagination[limit]=1000`,
+          {
+            data: {
+              codigo: codigo,
+              color: color,
+              categoria: categoria,
+              cliente: cliente,
+              precio: precio * cantidad,
+              cantidad: cantidad,
+              nombre: nombre,
+              precio_standart: precio,
+            },
+          }
+        );
         await axios.put(
           `${import.meta.env.VITE_API_URL}/accesorios/${obtenerId}`,
           {
@@ -328,18 +337,22 @@ export const FacturarAccesorio = () => {
               </div>
 
               <div className="flex flex-wrap gap-4 h-[300px] overflow-y-scroll scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-200 px-6">
-                {resultado.length ? resultado.map((a) => (
-                  <CardSeleccionAccesorio
-                    key={a.id}
-                    a={a}
-                    handleModal={handleModal}
-                    handlePerfilSeleccionadoId={handlePerfilSeleccionadoId}
-                  />
-                )): <div className="w-full flex justify-center">
+                {resultado.length ? (
+                  resultado.map((a) => (
+                    <CardSeleccionAccesorio
+                      key={a.id}
+                      a={a}
+                      handleModal={handleModal}
+                      handlePerfilSeleccionadoId={handlePerfilSeleccionadoId}
+                    />
+                  ))
+                ) : (
+                  <div className="w-full flex justify-center">
                     <span className="text-red-500 font-bold text-lg w-full">
                       No se encuentra ningun accesorio con ese nombre.
                     </span>
-                  </div>}
+                  </div>
+                )}
                 {modal && (
                   <div className="absolute top-[40%] left-[35%] flex flex-col gap-2 bg-white shadow-xl drop-shadow-2xl shadow-black/50 py-4 px-2 rounded-lg transition-all ease-in-out duration-500">
                     <div

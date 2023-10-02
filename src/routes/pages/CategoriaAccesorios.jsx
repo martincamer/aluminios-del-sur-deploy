@@ -15,7 +15,9 @@ export const CategoriaAccesorios = () => {
     async function loadData() {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/accesorios`
+          `${
+            import.meta.env.VITE_API_URL
+          }/accesorios?pagination[start]=0&pagination[limit]=1000`
         );
         setDatos(res.data.data);
         // console.log(res.data.data);
