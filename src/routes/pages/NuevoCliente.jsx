@@ -22,8 +22,8 @@ export const NuevoCliente = () => {
     } else {
       axios.post(`${import.meta.env.VITE_API_URL}/clientes`, {
         data: {
-          nombre: nombre,
-          apellido: apellido,
+          nombre: nombre.trim(),
+          apellido: apellido.trim(),
           localidad: localidad,
           total_pagar: total_pagar,
           barras: barras,

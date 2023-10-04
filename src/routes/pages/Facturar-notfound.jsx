@@ -8,19 +8,19 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import { PdfPerfil } from "../../components/PdfPerfil";
 import axios from "axios";
 import "jspdf-autotable";
+// import { jsPDF } from 'jspdf';
 
 export const Facturar = () => {
   const [seleccionar, setSeleccionar] = useState(false);
   const [perfil, setPerfil] = useState([]);
+  const [perfilCargado, setPerfilCargado] = useState([]);
   const [error, setError] = useState(false);
   const [search, setSearch] = useState([]);
   const [obtenerId, setObtenerId] = useState(null);
   const [modal, setModal] = useState(false);
-  const [editarModal, setEditarModal] = useState(false);
   const [perfilSeleccionado, setPerfilSeleccionado] = useState([]);
   const [clienteId, setClienteId] = useState([]);
   const [perfilId, setPerfilId] = useState([]);
-  const [editarPerfil, setEditarPerfil] = useState([]);
 
   const params = useParams();
 
@@ -34,20 +34,10 @@ export const Facturar = () => {
   if (!search) {
     resultado = perfil;
   } else {
-    resultado = perfil.filter(
-      (dato) =>
-        dato.attributes.codigo.toLowerCase().includes(search) ||
-        dato.attributes.nombre.toLowerCase().includes(search.toLowerCase())
+    resultado = perfil.filter((dato) =>
+      dato.attributes.codigo.toLowerCase().includes(search)
     );
   }
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-    // getValues,
-  } = useForm();
 
   //Obtener api metodo get clientes
   useEffect(() => {
@@ -58,23 +48,14 @@ export const Facturar = () => {
         }`
       );
 
-      setValue(
-        "precio_herrero",
-        res.data.data[0].attributes.precio_herrero || 0
-      );
-      setValue("precio_modena", res.data.data[0].attributes.precio_modena || 0);
+      setValue("precio_herrero", res.data.data[0].attributes.precio_herrero);
+      setValue("precio_modena", res.data.data[0].attributes.precio_modena);
       setValue(
         "precio_modena_a30",
-        res.data.data[0].attributes.precio_modena_a30 || 0
+        res.data.data[0].attributes.precio_modena_a30
       );
-      setValue(
-        "cliente",
-        res.data.data[0].attributes.nombre || "No se encontro el cliente"
-      );
-      setValue(
-        "fecha_pago",
-        res.data.data[0].attributes.fecha_pago || "2023-01-01"
-      );
+      setValue("cliente", res.data.data[0].attributes.nombre);
+
       setClienteId(res.data.data);
     }
 
@@ -94,14 +75,12 @@ export const Facturar = () => {
     load();
   }, [clienteId]);
 
+  console.log(clienteId[0]?.attributes.nombre);
+
   //Obtener get perfiles
   useEffect(() => {
     async function load() {
-      const res = await axios.get(
-        `${
-          import.meta.env.VITE_API_URL
-        }/perfiles?pagination[start]=0&pagination[limit]=1000`
-      );
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/perfiles`);
       setPerfil(res.data.data);
     }
 
@@ -132,26 +111,6 @@ export const Facturar = () => {
     load();
   }, [obtenerId]);
 
-  useEffect(() => {
-    async function load() {
-      const res = await axios.get(
-        `${
-          import.meta.env.VITE_API_URL
-        }/perfils?populate=*&filters[id]=${obtenerId}`
-      );
-      setEditarPerfil(res.data.data);
-
-      setValue("codigo", res.data.data[0].attributes.codigo);
-      setValue("color", res.data.data[0].attributes.color);
-      setValue("categoria", res.data.data[0].attributes.categoria);
-      setValue("barras", res.data.data[0].attributes.barras);
-      setValue("kg", res.data.data[0].attributes.kg);
-      setValue("slug", res.data.data[0].id);
-    }
-
-    load();
-  }, [obtenerId]);
-
   const handleModal = () => {
     setModal(!modal);
   };
@@ -161,6 +120,12 @@ export const Facturar = () => {
   };
 
   //Actualizar put clientes enviar datos
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm();
 
   const onSubmit = handleSubmit(
     async ({
@@ -173,14 +138,11 @@ export const Facturar = () => {
       precio_herrero,
       precio_modena,
       precio_modena_a30,
-      fecha_pago,
-      barras_compradas,
     }) => {
       axios.put(`${import.meta.env.VITE_API_URL}/clientes/${params.id}`, {
         data: {
           total_kilos_herrero: total_kilos_herrero,
           total_kilos_modena: total_kilos_modena,
-          total_kilos_modena_a30: total_kilos_modena_a30,
           precio_herrero: precio_herrero,
           precio_modena: precio_modena,
           kilos: (kilos =
@@ -191,8 +153,6 @@ export const Facturar = () => {
             total_kilos_modena_a30 * precio_modena_a30),
           precio_modena_a30: precio_modena_a30,
           barras: totalBarras(),
-          barras_compradas: totalBarrasCompradas() + totalBarras(),
-          fecha_pago: fecha_pago,
         },
       });
 
@@ -224,7 +184,7 @@ export const Facturar = () => {
       cliente,
       cantidad,
     }) => {
-      if (barras > perfilSeleccionado[0]?.attributes?.cantidad) {
+      if (barras > perfilSeleccionado[0].attributes.cantidad) {
         setTimeout(() => {
           setError(false);
         }, 1400);
@@ -245,7 +205,7 @@ export const Facturar = () => {
           `${import.meta.env.VITE_API_URL}/perfiles/${obtenerId}`,
           {
             data: {
-              cantidad: perfilSeleccionado[0]?.attributes?.cantidad - barras,
+              cantidad: perfilSeleccionado[0].attributes.cantidad - barras,
             },
           }
         );
@@ -264,39 +224,6 @@ export const Facturar = () => {
           location.reload();
         }, 1000);
       }
-    }
-  );
-
-  // console.log(perfilSeleccionarEditar);
-
-  const onEditPerfilSeleccionado = handleSubmit(
-    async ({ codigo, color, categoria, barras, kg, slug, cliente }) => {
-      await axios.put(`${import.meta.env.VITE_API_URL}/perfils/${obtenerId}`, {
-        data: {
-          codigo: codigo,
-          color: color,
-          categoria: categoria,
-          barras: barras,
-          kg: kg,
-          slug: slug,
-          cliente: cliente,
-        },
-      });
-
-      toast.success("Editado satifactoriamente!", {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-
-      setTimeout(() => {
-        location.reload();
-      }, 1000);
     }
   );
 
@@ -328,15 +255,6 @@ export const Facturar = () => {
       return sum + Number(b.attributes.barras);
     }, 0);
   };
-  const totalBarrasCompradas = () => {
-    return clienteId.reduce((sum, b) => {
-      return sum + Number(b.attributes.barras);
-    }, 0);
-  };
-
-  // console.log(totalBarrasCompradas());
-  // console.log(totalBarrasCompradas() + totalBarras());
-
   const totalKgHerrero = () => {
     return perfilId.reduce((sum, b) => {
       return (
@@ -363,7 +281,7 @@ export const Facturar = () => {
     setValue("total_kilos_herrero", totalKgHerrero());
     setValue("total_kilos_modena", totalKgModena());
     setValue("total_kilos_modena_a30", totalKgModenaA30());
-  }, [totalKgHerrero, totalKgModena, totalKgModenaA30]);
+  }, [totalKgHerrero, totalKgModena]);
 
   const clickToatFacturar = () => {
     toast.success("Facturado correctamente!", {
@@ -448,24 +366,16 @@ export const Facturar = () => {
                 />
               </div>
 
-              <div className="max-md:grid-cols-2 grid grid-cols-3 gap-4 h-[300px] max-md:h-[200px] overflow-y-scroll scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-200 px-6">
-                {resultado.length ? (
-                  resultado.map((p) => (
-                    <CardSeleccionPerfil
-                      key={p.id}
-                      p={p}
-                      handleModal={handleModal}
-                      handlePerfilSeleccionadoId={handlePerfilSeleccionadoId}
-                      setSeleccionar={setSeleccionar}
-                    />
-                  ))
-                ) : (
-                  <div className="w-full flex justify-center">
-                    <span className="text-red-500 font-bold text-lg w-full">
-                      No se encuentra ningun perfil con ese nombre.
-                    </span>
-                  </div>
-                )}
+              <div className="max-md:grid-cols-2 grid grid-cols-3 gap-4 overflow-y-scroll h-[300px] max-md:h-[200px]">
+                {resultado.map((p) => (
+                  <CardSeleccionPerfil
+                    key={p.id}
+                    p={p}
+                    handleModal={handleModal}
+                    handlePerfilSeleccionadoId={handlePerfilSeleccionadoId}
+                    setSeleccionar={setSeleccionar}
+                  />
+                ))}
                 {modal && (
                   <div className="absolute top-[50%] left-[30%] flex flex-col gap-2 bg-white shadow-xl drop-shadow-2xl shadow-black/50 py-4 px-2 rounded-lg  duration-500 max-md:left-[5%] max-md:w-[90%] max-md:top-[10px]">
                     <div
@@ -579,8 +489,7 @@ export const Facturar = () => {
                         // value={kilos}
                         // onChange={e => setKilos(e.target.value)}
                         type="number"
-                        // inputmode="decimal"
-                        step="0.001"
+                        step="0.01"
                         placeholder="Cantidad de kilos"
                         className="text-sm rounded-lg p-2 text-black placeholder:text-gray-900 outline-none bg-gray-200 shadow-md shadow-black/20 max-md:mb-2"
                       />
@@ -596,129 +505,6 @@ export const Facturar = () => {
               </div>
             </div>
           </div>
-
-          {editarModal && (
-            <div className="absolute top-[20%] left-[30%] flex flex-col gap-2 bg-white shadow-xl drop-shadow-2xl shadow-black/50 py-4 px-2 rounded-lg  duration-500 max-md:left-[5%] max-md:w-[90%] max-md:top-[10px]">
-              <div
-                onClick={() => setEditarModal(!editarModal)}
-                className="text-black font-bold text-[19px] px-4 flex justify-end cursor-pointer hover:text-primary transition-all ease-in-out"
-              >
-                X
-              </div>
-              <form
-                onSubmit={onEditPerfilSeleccionado}
-                className="flex flex-col gap-3 max-md:gap-1"
-              >
-                {error ? (
-                  <span className="bg-red-500 text-sm text-white p-2 rounded-lg text-center max-md:text-xs">
-                    Selecciona una cantidad menor de:{" "}
-                    {perfilSeleccionado[0].attributes.cantidad}
-                  </span>
-                ) : (
-                  ""
-                )}
-
-                <div>
-                  <label
-                    className='className="text-sm font-bold text-black capitalize max-md:text-sm'
-                    htmlFor=""
-                  >
-                    Codigo:{" "}
-                  </label>
-                  <input
-                    type="text"
-                    {...register("codigo", {
-                      required: true,
-                    })}
-                    className="font-bold text-primary capitalize bg-transparent outline-none max-md:text-sm"
-                  />
-                </div>
-                <div>
-                  <label
-                    className='className="text-sm font-bold text-black capitalize max-md:text-sm'
-                    htmlFor=""
-                  >
-                    Color:{" "}
-                  </label>
-                  <input
-                    type="text"
-                    {...register("color", {
-                      required: true,
-                    })}
-                    className="font-bold text-primary capitalize bg-transparent outline-none max-md:text-sm"
-                  />
-                </div>
-                <div>
-                  <label
-                    className='className="text-sm font-bold text-black capitalize max-md:text-sm'
-                    htmlFor=""
-                  >
-                    categoria:{" "}
-                  </label>
-                  <input
-                    type="text"
-                    {...register("categoria", {
-                      required: true,
-                    })}
-                    className="font-bold text-primary capitalize bg-transparent outline-none max-md:text-sm max-md:w-[60px]"
-                  />
-                </div>
-                <div>
-                  <label
-                    className='className="text-sm font-bold text-black capitalize max-md:text-sm'
-                    htmlFor=""
-                  >
-                    Cliente:{" "}
-                  </label>
-                  <input
-                    type="text"
-                    {...register("cliente", {
-                      required: true,
-                    })}
-                    className="font-bold text-primary capitalize bg-transparent outline-none max-md:text-sm"
-                  />
-                </div>
-                <div>
-                  <label
-                    className='className="text-sm font-bold text-black capitalize max-md:text-sm'
-                    htmlFor=""
-                  >
-                    ID:{" "}
-                  </label>
-                  <input
-                    type="number"
-                    {...register("slug", {
-                      required: true,
-                    })}
-                    className="font-bold text-primary capitalize bg-transparent outline-none max-md:text-sm"
-                  />
-                </div>
-
-                <input
-                  {...register("barras", {
-                    required: true,
-                  })}
-                  type="number"
-                  placeholder="Cantidad de barras"
-                  className="text-sm rounded-lg p-2 text-black placeholder:text-gray-900 outline-none bg-gray-200 shadow-md shadow-black/20 max-md:mb-2"
-                />
-
-                <input
-                  {...register("kg", { required: true })}
-                  step="0.001"
-                  type="number"
-                  placeholder="Cantidad de kilos"
-                  className="text-sm rounded-lg p-2 text-black placeholder:text-gray-900 outline-none bg-gray-200 shadow-md shadow-black/20 max-md:mb-2"
-                />
-
-                <input
-                  type="submit"
-                  className="bg-black text-white p-2 rounded-lg text-center outline-none cursor-pointer text-sm"
-                  value={"Editar Perfil"}
-                />
-              </form>
-            </div>
-          )}
 
           <div className="bg-white p-4 rounded-lg grid grid-cols-3 max-md:grid-cols-1 justify-items-center gap-2 overflow-y-scroll h-[200px]">
             {perfilId.map((p) => (
@@ -745,22 +531,17 @@ export const Facturar = () => {
                   </span>
                 </div>
 
-                <div className="flex flex-col justify-center items-center gap-2">
+                <div className="flex flex-col justify-center items-center">
                   <input
                     className="bg-red-500 px-3 py-2 text-white rounded-full w-[40px] h-[40px] text-sm text-center outline-none cursor-pointer max-md:text-xs"
                     value={"X"}
                     onClick={() => handleDelete(p.id)}
                   />
-                  <input
-                    className="bg-green-500 px-3 py-2 text-white rounded-full w-[40px] h-[40px] text-sm text-center outline-none cursor-pointer max-md:text-xs"
-                    value={"E"}
-                    onClick={() => {
-                      {
-                        handlePerfilSeleccionadoId(p.id),
-                          setEditarModal(!editarModal);
-                      }
-                    }}
-                  />
+                  {/* <input
+										className="bg-green-500 px-3 py-2 text-white rounded-full w-[40px] h-[40px] text-sm text-center outline-none cursor-pointer max-md:text-xs"
+										value={'E'}
+										// onClick={() => handleModal(p.id)}
+									/> */}
                 </div>
               </div>
             ))}
@@ -818,28 +599,17 @@ export const Facturar = () => {
           </div>
 
           <div className="flex gap-3 items-center">
-            {errors.precio_herrero && (
-              <span className="bg-red-500 text-sm text-white rounded-lg p-3 text-center uppercase">
-                la fecha es requerida
-              </span>
-            )}
             <label className="font-semibold text-normal text-white max-md:text-sm">
               Precio de kilo herrero:
             </label>
             <input
               step="0.01"
-              onChange={"precio_herrero"}
               {...register("precio_herrero", { required: true })}
               type="number"
               className="px-0 py-3 text-center rounded-full bg-white outline-none placeholder:text-black/50 w-auto max-md:text-sm max-md:w-[100px]"
             />
           </div>
           <div className="flex gap-3 items-center">
-            {errors.precio_modena && (
-              <span className="bg-red-500 text-sm text-white rounded-lg p-3 text-center uppercase">
-                la fecha es requerida
-              </span>
-            )}
             <label className="font-semibold text-normal text-white max-md:text-sm">
               Precio de kilo modena:
             </label>
@@ -851,11 +621,6 @@ export const Facturar = () => {
             />
           </div>
           <div className="flex gap-3 items-center">
-            {errors.precio_modena_a30 && (
-              <span className="bg-red-500 text-sm text-white rounded-lg p-3 text-center uppercase">
-                la fecha es requerida
-              </span>
-            )}
             <label className="font-semibold text-normal text-white max-md:text-sm">
               Precio de kilo modena a-30:
             </label>
@@ -867,27 +632,12 @@ export const Facturar = () => {
             />
           </div>
           <div className="flex gap-3 items-center">
-            {errors.fecha && (
-              <span className="bg-red-500 text-sm text-white rounded-lg p-3 text-center uppercase">
-                la fecha es requerida
-              </span>
-            )}
-            <label className="font-semibold text-normal text-white max-md:text-sm">
-              Seleccionar Fecha:
-            </label>
-            <input
-              {...register("fecha_pago", { required: true })}
-              type="date"
-              className="px-6 py-3 rounded-lg bg-white outline-none placeholder:text-black/60 w-auto"
-            />
-          </div>
-          <div className="flex gap-3 items-center">
             <label className="font-semibold text-normal text-white max-md:text-sm">
               Total a pagar:
             </label>
 
             <div className="text-white bg-green-600 py-2 px-5 rounded-xl text-xl max-md:text-base font-bold">
-              ${clienteId[0]?.attributes.total_pagar.toLocaleString("arg")}
+              $ {clienteId[0]?.attributes.total_pagar.toLocaleString("arg")}
             </div>
           </div>
           <div className="flex gap-3">

@@ -11,7 +11,11 @@ export const Clientes = () => {
   useEffect(() => {
     async function loadData() {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/clientes`);
+        const res = await axios.get(
+          `${
+            import.meta.env.VITE_API_URL
+          }/clientes?pagination[start]=0&pagination[limit]=1000`
+        );
         setDatos(res.data.data);
         // console.log(res.data.data);
       } catch (error) {
@@ -54,8 +58,8 @@ export const Clientes = () => {
   } else {
     resultado = datos.filter(
       (dato) =>
-        dato.attributes.apellido.toLowerCase().includes(search.toLowerCase()) ||
-        dato.attributes.nombre.toLowerCase().includes(search.toLowerCase())
+        dato.attributes.nombre.toLowerCase().includes(search.toLowerCase()) ||
+        dato.attributes.apellido.toLowerCase().includes(search.toLowerCase())
     );
   }
 
