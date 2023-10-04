@@ -366,7 +366,9 @@ export const PdfPerfilPresupusto = ({
             <View key={p.id} style={styles.row}>
               <Text style={styles.row1}>{p.cantidad}</Text>
               <Text style={styles.row2}>{p.codigo}</Text>
-              <Text style={styles.row3}>{p.nuevoValor}</Text>
+              <Text style={styles.row3}>
+                {p.nuevoValor.toLocaleString("arg")}
+              </Text>
               <Text style={styles.row4}>{p.categoria}</Text>
               <Text style={styles.row4}>{p.colores}</Text>
             </View>
@@ -385,21 +387,21 @@ export const PdfPerfilPresupusto = ({
                 fontSize: "12px",
               }}
             >
-              Precio Kilo Herrero: ${precioKiloHerrero.toLocaleString("arg")}
+              Precio Kg Herrero: ${precioKiloHerrero.toLocaleString("arg")}
             </Text>
             <Text
               style={{
                 fontSize: "12px",
               }}
             >
-              Precio Kilo Modena: ${precioKiloModena.toLocaleString("arg")}
+              Precio Kg Modena: ${precioKiloModena.toLocaleString("arg")}
             </Text>
             <Text
               style={{
                 fontSize: "12px",
               }}
             >
-              Precio Kilo Modena a-30: $
+              Precio Kg Modena a-30: $
               {precioKiloModenaA30.toLocaleString("arg")}
             </Text>
             <Text

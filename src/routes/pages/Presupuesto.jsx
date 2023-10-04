@@ -440,7 +440,7 @@ export const Presupuesto = () => {
                     <span className="text-primary">Cod:</span> {p.codigo}
                   </span>
                   <span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
-                    {p.nuevoValor} kg
+                    {p.nuevoValor.toLocaleString("arg")} kg
                   </span>
                   <span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
                     {p.colores}
