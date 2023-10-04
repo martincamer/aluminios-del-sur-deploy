@@ -36,6 +36,7 @@ export const PdfPerfilPresupusto = ({
       display: "flex",
       flexDirection: "row",
       alignItems: "center",
+      alignContent: "center",
       justifyContent: "center",
       borderTop: "1px solid #000",
       borderBottom: "1px solid #000",
@@ -362,17 +363,20 @@ export const PdfPerfilPresupusto = ({
           </View>
 
           {/* <View style={{ display: 'flex', justifyContent: 'center' }}> */}
-          {perfilEnviado?.map((p) => (
-            <View key={p.id} style={styles.row}>
-              <Text style={styles.row1}>{p.cantidad}</Text>
-              <Text style={styles.row2}>{p.codigo}</Text>
-              <Text style={styles.row3}>
-                {p.nuevoValor.toLocaleString("arg")}
-              </Text>
-              <Text style={styles.row4}>{p.categoria}</Text>
-              <Text style={styles.row4}>{p.colores}</Text>
-            </View>
-          ))}
+          {perfilEnviado?.map(
+            (p) =>
+              clienteId[0]?.attributes?.nombre === p.cliente && (
+                <View key={p.id} style={styles.row}>
+                  <Text style={styles.row1}>{p.cantidad}</Text>
+                  <Text style={styles.row2}>{p.codigo}</Text>
+                  <Text style={styles.row3}>
+                    {p.nuevoValor.toLocaleString("arg")}
+                  </Text>
+                  <Text style={styles.row4}>{p.categoria}</Text>
+                  <Text style={styles.row4}>{p.colores}</Text>
+                </View>
+              )
+          )}
         </View>
 
         <View style={styles.contentFinal}>
@@ -409,7 +413,7 @@ export const PdfPerfilPresupusto = ({
                 fontSize: "12px",
               }}
             >
-              Total de Kilos: {totalKilos().toLocaleString("arg")} kg
+              Total de Kg: {totalKilos().toLocaleString("arg")} kg
             </Text>
             {/* <Text
 							style={{

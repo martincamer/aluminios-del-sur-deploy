@@ -183,31 +183,63 @@ export const Presupuesto = () => {
     setPerfilEnviado(newItem);
   };
 
+  // const totalKgHerrero = () => {
+  //   return perfilEnviado.reduce((sum, b) => {
+  //     return sum + Number(b.categoria == "herrero" && b.nuevoValor);
+  //   }, 0);
+  // };
   const totalKgHerrero = () => {
     return perfilEnviado.reduce((sum, b) => {
-      return sum + Number(b.categoria == "herrero" && b.nuevoValor);
+      return (
+        sum +
+        Number(
+          clienteId[0]?.attributes?.nombre === b.cliente &&
+            b.categoria == "herrero" &&
+            b.nuevoValor
+        )
+      );
     }, 0);
   };
   const totalKgModena = () => {
     return perfilEnviado.reduce((sum, b) => {
-      return sum + Number(b.categoria == "modena" && b.nuevoValor);
+      return (
+        sum +
+        Number(
+          clienteId[0]?.attributes?.nombre === b.cliente &&
+            b.categoria == "modena" &&
+            b.nuevoValor
+        )
+      );
     }, 0);
   };
   const totalKgModenaA30 = () => {
     return perfilEnviado.reduce((sum, b) => {
-      return sum + Number(b.categoria == "modena a-30" && b.nuevoValor);
+      return (
+        sum +
+        Number(
+          clienteId[0]?.attributes?.nombre === b.cliente &&
+            b.categoria == "modena a-30" &&
+            b.nuevoValor
+        )
+      );
     }, 0);
   };
 
   const totalBarrasEnviado = () => {
     return perfilEnviado.reduce((sum, b) => {
-      return sum + Number(b.cantidad);
+      return (
+        sum +
+        Number(clienteId[0]?.attributes?.nombre === b.cliente && b.cantidad)
+      );
     }, 0);
   };
 
   const totalKilos = () => {
     return perfilEnviado.reduce((sum, b) => {
-      return sum + Number(b.nuevoValor);
+      return (
+        sum +
+        Number(clienteId[0]?.attributes?.nombre === b.cliente && b.nuevoValor)
+      );
     }, 0);
   };
 
@@ -426,37 +458,50 @@ export const Presupuesto = () => {
               </div>
             </div>
           </div>
-          <div className="bg-white p-4 rounded-lg grid grid-cols-3 max-md:grid-cols-1 justify-items-center gap-2 overflow-y-scroll h-[200px]">
-            {perfilEnviado.map((p) => (
-              <div
-                key={p.id}
-                className="bg-primary rounded-lg flex justify-between p-4 gap-4 h-[132px] w-full shadow-md shadow-black/30"
-              >
-                <div className="grid grid-cols-2 max-md:grid-cols-2 items-center justify-center justify-items-center gap-2 w-full">
-                  <span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
-                    {p.cantidad} brs
-                  </span>
-                  <span className="capitalizetext-black capitalize gap-[2px] bg-white px-1 py-1 justify-center rounded-full text-xs font-bold w-full flex items-center max-md:text-xs">
-                    <span className="text-primary">Cod:</span> {p.codigo}
-                  </span>
-                  <span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
-                    {p.nuevoValor.toLocaleString("arg")} kg
-                  </span>
-                  <span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
-                    {p.colores}
-                  </span>
-                  <span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
-                    {p.categoria}
-                  </span>
-                </div>
 
-                <div className="flex flex-col justify-center items-center gap-2">
-                  <input
-                    className="bg-red-500 px-3 py-2 text-white rounded-full w-[40px] h-[40px] text-sm text-center outline-none cursor-pointer max-md:text-xs"
-                    value={"X"}
-                    onClick={() => addToDelete(p.id)}
-                  />
-                  {/* <input
+          <div className="bg-white p-4 rounded-lg grid grid-cols-3 max-md:grid-cols-1 justify-items-center gap-2 overflow-y-scroll h-[200px]">
+            {perfilEnviado.map(
+              (p) =>
+                clienteId[0]?.attributes?.nombre === p.cliente && (
+                  <div
+                    key={p.id}
+                    className="bg-primary rounded-lg flex justify-between p-4 gap-4 h-[132px] w-full shadow-md shadow-black/30"
+                  >
+                    <div className="grid grid-cols-2 max-md:grid-cols-2 items-center justify-center justify-items-center gap-2 w-full">
+                      {clienteId[0]?.attributes?.nombre === p.cliente && (
+                        <span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
+                          {p.cantidad} brs
+                        </span>
+                      )}
+                      {clienteId[0]?.attributes?.nombre === p.cliente && (
+                        <span className="capitalizetext-black capitalize gap-[2px] bg-white px-1 py-1 justify-center rounded-full text-xs font-bold w-full flex items-center max-md:text-xs">
+                          <span className="text-primary">Cod:</span> {p.codigo}
+                        </span>
+                      )}
+                      {clienteId[0]?.attributes?.nombre === p.cliente && (
+                        <span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
+                          {p.nuevoValor.toLocaleString("arg")} kg
+                        </span>
+                      )}
+                      {clienteId[0]?.attributes?.nombre === p.cliente && (
+                        <span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
+                          {p.colores}
+                        </span>
+                      )}
+                      {clienteId[0]?.attributes?.nombre === p.cliente && (
+                        <span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
+                          {p.categoria}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="flex flex-col justify-center items-center gap-2">
+                      <input
+                        className="bg-red-500 px-3 py-2 text-white rounded-full w-[40px] h-[40px] text-sm text-center outline-none cursor-pointer max-md:text-xs"
+                        value={"X"}
+                        onClick={() => addToDelete(p.id)}
+                      />
+                      {/* <input
 										className="bg-green-500 px-3 py-2 text-white rounded-full w-[40px] h-[40px] text-sm text-center outline-none cursor-pointer max-md:text-xs"
 										value={'E'}
 										onClick={() => {
@@ -467,9 +512,10 @@ export const Presupuesto = () => {
 											}
 										}}
 									/> */}
-                </div>
-              </div>
-            ))}
+                    </div>
+                  </div>
+                )
+            )}
           </div>
         </div>
 
@@ -484,7 +530,8 @@ export const Presupuesto = () => {
               Total de kilos herrero:
             </label>
             <div className="px-0 py-3 text-center w-40 rounded-full bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]">
-              {totalKgHerrero().toLocaleString("arg") || 0}
+              {/* {totalKgHerrero().toLocaleString("arg") || 0} */}
+              {totalKgHerrero()}
             </div>
 
             {/* <div>{totalKgHerrero()}</div> */}
