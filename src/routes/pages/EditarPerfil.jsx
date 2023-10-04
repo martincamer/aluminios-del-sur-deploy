@@ -18,13 +18,21 @@ export const EditarPerfil = () => {
   } = useForm();
 
   const onSubmit = handleSubmit(
-    async ({ codigo, nombre, colores, cantidad, categoria }) => {
+    async ({
+      codigo,
+      nombre,
+      colores,
+      cantidad,
+      kg_estimado_barra,
+      categoria,
+    }) => {
       axios.put(`${import.meta.env.VITE_API_URL}/perfiles/${params.id}`, {
         data: {
           codigo: codigo,
           nombre: nombre,
           colores: colores,
           cantidad: cantidad,
+          kg_estimado_barra: kg_estimado_barra,
           categoria: categoria,
         },
       });
@@ -56,7 +64,11 @@ export const EditarPerfil = () => {
       setValue("codigo", res.data.data[0].attributes.codigo);
       setValue("nombre", res.data.data[0].attributes.nombre);
       setValue("colores", res.data.data[0].attributes.colores);
-      setValue("cantidad", res.data.data[0].attributes.cantidad);
+      setValue("cantidad", res.data.data[0].attributes.cantidad || 0);
+      setValue(
+        "kg_estimado_barra",
+        res.data.data[0].attributes.kg_estimado_barra || 0
+      );
       setValue("categoria", res.data.data[0].attributes.categoria);
 
       // setDatosPerfil(res.data.data);
@@ -169,6 +181,27 @@ export const EditarPerfil = () => {
               type="number"
               min="0"
               pattern="^[0-9]+"
+              className="px-6 py-3 rounded-lg bg-white outline-none placeholder:text-black/60 w-auto"
+              placeholder="Escribir cantidad de barras"
+            />
+          </div>
+          <div className="flex flex-col gap-3 w-full">
+            {errors.kg_estimado_barra && (
+              <span className="bg-red-500 text-sm text-white rounded-lg p-3 text-center uppercase">
+                el kg neto de la barra es necesario
+              </span>
+            )}
+            <label className="font-semibold text-normal text-white">
+              Cantidad de kg neto por barra:
+            </label>
+            <input
+              {...register("kg_estimado_barra", { required: true })}
+              // value={cantidad}
+              // onChange={e => setCantidad(e.target.value)}
+              type="number"
+              min="0"
+              pattern="^[0-9]+"
+              step="0.001"
               className="px-6 py-3 rounded-lg bg-white outline-none placeholder:text-black/60 w-auto"
               placeholder="Escribir cantidad de barras"
             />

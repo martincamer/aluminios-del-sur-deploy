@@ -103,7 +103,7 @@ export const Perfiles = () => {
             resultado?.map((perfil) => (
               <div
                 key={perfil.id}
-                className="bg-gray-200 p-5 rounded-lg shadow-black/20 shadow-lg space-y-2 h-[250px] w-full max-h-full flex flex-col justify-center "
+                className="bg-gray-200 p-5 rounded-lg shadow-black/20 shadow-lg space-y-2 h-[280px] w-full max-h-full flex flex-col justify-center "
               >
                 <p className="capitalize">
                   <span className="font-bold text-black capitalize">
@@ -126,6 +126,10 @@ export const Perfiles = () => {
                 <p className="capitalize">
                   <span className="font-bold text-black">CATEGORIA:</span>{" "}
                   {perfil.attributes.categoria}
+                </p>
+                <p className="capitalize">
+                  <span className="font-bold text-black">PESO NETO BARRA:</span>{" "}
+                  {perfil.attributes.kg_estimado_barra || 0} kg
                 </p>
                 <div className="flex justify-between gap-2">
                   <Link

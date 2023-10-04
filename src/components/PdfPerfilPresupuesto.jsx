@@ -366,7 +366,7 @@ export const PdfPerfilPresupusto = ({
             <View key={p.id} style={styles.row}>
               <Text style={styles.row1}>{p.cantidad}</Text>
               <Text style={styles.row2}>{p.codigo}</Text>
-              <Text style={styles.row3}>{p.kilos}</Text>
+              <Text style={styles.row3}>{p.nuevoValor}</Text>
               <Text style={styles.row4}>{p.categoria}</Text>
               <Text style={styles.row4}>{p.colores}</Text>
             </View>
@@ -407,7 +407,7 @@ export const PdfPerfilPresupusto = ({
                 fontSize: "12px",
               }}
             >
-              Total de Kilos: {totalKilos()} kg
+              Total de Kilos: {totalKilos().toLocaleString("arg")} kg
             </Text>
             {/* <Text
 							style={{

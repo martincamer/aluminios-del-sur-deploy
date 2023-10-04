@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 
 export const EstadoCliente = () => {
   const [datos, setDatos] = useState([]);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     async function loadData() {
@@ -60,17 +61,40 @@ export const EstadoCliente = () => {
     }
   };
 
+  const searcher = (e) => {
+    setSearch(e.target.value);
+  };
+
+  let resultado = [];
+
+  if (!search) {
+    resultado = datos;
+  } else {
+    resultado = datos.filter(
+      (dato) =>
+        dato.attributes.apellido.toLowerCase().includes(search.toLowerCase()) ||
+        dato.attributes.nombre.toLowerCase().includes(search.toLowerCase())
+    );
+  }
+
   return (
     <div className="flex h-full max-h-full min-h-full">
       <SideBar />
       <ToastContainer />
-      <div className="p-5 w-full flex flex-col gap-5">
+      <div className="p-5 w-full flex flex-col gap-5 overflow-y-scroll scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-200 h-[70vh] mx-2">
         <div>
           <h2 className="text-4xl font-semibold text-primary underline">
             Estado de los{" "}
             <span className="font-extrabold">Clientes - Perfiles.</span>
           </h2>
         </div>
+        <input
+          value={search}
+          onChange={searcher}
+          type="text"
+          className="rounded-lg border-[1px]  border-gray-300 px-2 py-2 w-1/2 text-black placeholder:text-gray-400 outline-none shadow-md shadow-black/10"
+          placeholder="Buscar cliente..."
+        />
         <table className="w-full">
           <thead>
             <tr>
@@ -103,7 +127,7 @@ export const EstadoCliente = () => {
                   Pago Confirmado - No confirmado
                 </th>
 
-                {datos.map((i) => (
+                {resultado.map((i) => (
                   <tr
                     key={i.id}
                     className="bg-primary border-2 border-gray-900"

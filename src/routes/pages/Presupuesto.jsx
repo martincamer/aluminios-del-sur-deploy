@@ -31,6 +31,7 @@ export const Presupuesto = () => {
   const [codigo, setCodigo] = useState("");
   const [colores, setColores] = useState("");
   const [categoria, setCategoria] = useState("");
+  const [kg_peso_neto, setKiloPesoNeto] = useState(0);
   const [cliente, setCliente] = useState("");
   const [totalPagar, setTotalPagar] = useState(0);
   const [totalBarras, setTotalBarras] = useState(0);
@@ -136,6 +137,9 @@ export const Presupuesto = () => {
         setCodigo(respuesta.data.data[0].attributes.codigo);
         setColores(respuesta.data.data[0].attributes.colores);
         setCategoria(respuesta.data.data[0].attributes.categoria);
+        setKiloPesoNeto(
+          respuesta.data.data[0].attributes.kg_estimado_barra || 0
+        );
         // setCodigo(respuesta.data.data[0].attributes.id);
       } catch (error) {
         console.log(error);
@@ -155,6 +159,8 @@ export const Presupuesto = () => {
   const addToPerfil = (e) => {
     e.preventDefault();
 
+    const nuevoValor = cantidad * kg_peso_neto;
+
     const newItem = {
       id: perfilSeleccionado[0].id,
       codigo,
@@ -162,7 +168,7 @@ export const Presupuesto = () => {
       categoria,
       cliente,
       cantidad,
-      kilos,
+      nuevoValor,
     };
 
     setPerfilEnviado([...perfilEnviado, newItem]);
@@ -179,17 +185,17 @@ export const Presupuesto = () => {
 
   const totalKgHerrero = () => {
     return perfilEnviado.reduce((sum, b) => {
-      return sum + Number(b.categoria == "herrero" && b.kilos);
+      return sum + Number(b.categoria == "herrero" && b.nuevoValor);
     }, 0);
   };
   const totalKgModena = () => {
     return perfilEnviado.reduce((sum, b) => {
-      return sum + Number(b.categoria == "modena" && b.kilos);
+      return sum + Number(b.categoria == "modena" && b.nuevoValor);
     }, 0);
   };
   const totalKgModenaA30 = () => {
     return perfilEnviado.reduce((sum, b) => {
-      return sum + Number(b.categoria == "modena a-30" && b.kilos);
+      return sum + Number(b.categoria == "modena a-30" && b.nuevoValor);
     }, 0);
   };
 
@@ -201,7 +207,7 @@ export const Presupuesto = () => {
 
   const totalKilos = () => {
     return perfilEnviado.reduce((sum, b) => {
-      return sum + Number(b.kilos);
+      return sum + Number(b.nuevoValor);
     }, 0);
   };
 
@@ -399,11 +405,11 @@ export const Presupuesto = () => {
 
                       <input
                         min="1"
-                        value={kilos}
-                        onChange={(e) => setKilos(e.target.value)}
+                        value={kg_peso_neto}
+                        onChange={(e) => setKiloPesoNeto(e.target.value)}
                         type="number"
                         step="0.001"
-                        placeholder="Cantidad de kilos"
+                        placeholder="kg barra peso neto"
                         className="text-sm rounded-lg p-2 text-black placeholder:text-gray-900 outline-none bg-gray-200 shadow-md shadow-black/20 max-md:mb-2"
                       />
 
@@ -434,7 +440,7 @@ export const Presupuesto = () => {
                     <span className="text-primary">Cod:</span> {p.codigo}
                   </span>
                   <span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
-                    {p.kilos} kg
+                    {p.nuevoValor} kg
                   </span>
                   <span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
                     {p.colores}
@@ -478,7 +484,7 @@ export const Presupuesto = () => {
               Total de kilos herrero:
             </label>
             <div className="px-0 py-3 text-center w-40 rounded-full bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]">
-              {totalKgHerrero() || 0}
+              {totalKgHerrero().toLocaleString("arg") || 0}
             </div>
 
             {/* <div>{totalKgHerrero()}</div> */}
@@ -488,7 +494,7 @@ export const Presupuesto = () => {
               Total de kilos modena:
             </label>
             <div className="px-0 py-3 text-center w-40 rounded-full bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]">
-              {totalKgModena() || 0}
+              {totalKgModena().toLocaleString("arg") || 0}
             </div>
           </div>
           <div className="flex gap-3 items-center">
@@ -496,7 +502,7 @@ export const Presupuesto = () => {
               Total de kilos modena a-30:
             </label>
             <div className="px-0 py-3 text-center w-40 rounded-full bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]">
-              {totalKgModenaA30() || 0}
+              {totalKgModenaA30().toLocaleString("arg") || 0}
             </div>
           </div>
           <div className="flex gap-3 items-center">

@@ -9,6 +9,7 @@ export const CargarPerfil = () => {
   const [colores, setColores] = useState("");
   const [cantidad, setCantidad] = useState(0);
   const [categoria, setCategoria] = useState("");
+  const [kg_estimado_barra, setKgEstimadoPorBarra] = useState(0);
   const [error, setError] = useState(false);
 
   const navigate = useNavigate();
@@ -16,7 +17,16 @@ export const CargarPerfil = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if ([codigo, nombre, colores, cantidad, categoria].includes("")) {
+    if (
+      [
+        codigo,
+        nombre,
+        colores,
+        cantidad,
+        categoria,
+        kg_estimado_barra,
+      ].includes("")
+    ) {
       setError(true);
     } else {
       axios.post(`${import.meta.env.VITE_API_URL}/perfiles`, {
@@ -24,6 +34,7 @@ export const CargarPerfil = () => {
           codigo: codigo,
           nombre: nombre,
           colores: colores,
+          kg_estimado_barra: kg_estimado_barra,
           cantidad: cantidad,
           categoria: categoria,
         },
@@ -105,6 +116,19 @@ export const CargarPerfil = () => {
               type="number"
               className="px-6 py-3 rounded-lg bg-white outline-none placeholder:text-black/60 w-auto"
               placeholder="Escribir cantidad de barras"
+            />
+          </div>
+          <div className="flex flex-col gap-3 w-full">
+            <label className="font-semibold text-normal text-white">
+              Peso neto de la barra:
+            </label>
+            <input
+              value={kg_estimado_barra}
+              onChange={(e) => setKgEstimadoPorBarra(e.target.value)}
+              type="number"
+              step="0.001"
+              className="px-6 py-3 rounded-lg bg-white outline-none placeholder:text-black/60 w-auto"
+              placeholder="Escribir la cantidad de kg neto barra"
             />
           </div>
 
