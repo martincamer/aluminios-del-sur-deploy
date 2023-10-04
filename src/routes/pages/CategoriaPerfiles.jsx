@@ -139,6 +139,12 @@ export const CategoriaPerfiles = () => {
                       {perfil.attributes.cantidad}
                     </p>
                     <p className="capitalize">
+                      <span className="font-bold text-black">
+                        PESO NETO BARRA:
+                      </span>{" "}
+                      {perfil.attributes.kg_estimado_barra || 0} kg
+                    </p>
+                    <p className="capitalize">
                       <span className="font-bold text-black">CATEGORIA:</span>{" "}
                       {perfil.attributes.categoria}
                     </p>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { SideBar } from "../../components/SideBar";
 import { ToastContainer } from "react-toastify";
+import { BsFillCalendarDateFill } from "react-icons/bs";
 import axios from "axios";
 
 export const Home = () => {
@@ -80,6 +81,10 @@ export const Home = () => {
     }, 0);
   };
 
+  let mesActual = new Intl.DateTimeFormat("es-ES", { month: "long" }).format(
+    new Date()
+  );
+
   return (
     <div className="flex">
       <SideBar />
@@ -94,10 +99,14 @@ export const Home = () => {
           </p>
         </div>
 
-        <div className="flex flex-col gap-5 items-center bg-gray-200 py-4 px-2 rounded-lg shadow-lg shadow-black/30 w-[400px] h-[300px]">
+        <div className="flex flex-col gap-5 items-center bg-gray-200 py-10 px-2 rounded-lg shadow-lg shadow-black/30 w-[400px]">
           <div>
-            <h4 className="uppercase font-bold text-primary text-lg">
-              estadísticas del mes {new Date().toLocaleDateString()}
+            <h4 className="uppercase font-bold text-primary text-lg text-center flex items-center flex-col gap-2">
+              estadísticas del mes{" "}
+              <span className="text-green-600 text-2xl flex flex-row gap-4 items-center justify-center">
+                <BsFillCalendarDateFill className="text-orange-500 text-3xl" />{" "}
+                {mesActual}
+              </span>
             </h4>
           </div>
           <div className="flex flex-col h-full items-center space-y-3">

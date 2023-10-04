@@ -12,7 +12,11 @@ export const EstadoCliente = () => {
   useEffect(() => {
     async function loadData() {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/clientes`);
+        const res = await axios.get(
+          `${
+            import.meta.env.VITE_API_URL
+          }/clientes?pagination[start]=0&pagination[limit]=1000`
+        );
         setDatos(res.data.data);
       } catch (error) {
         console.log(error);
