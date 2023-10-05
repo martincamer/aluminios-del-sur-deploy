@@ -6,7 +6,6 @@ import { CardSeleccionPerfil } from "../../components/CardSeleccionPerfil";
 import { BuscadorPerfilSeleccionar } from "../../components/BuscadorPerfilSeleccionar";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { PdfPerfil } from "../../components/PdfPerfil";
-import { AiFillCloseCircle, AiFillEdit } from "react-icons/ai";
 import axios from "axios";
 import "jspdf-autotable";
 
@@ -402,7 +401,7 @@ export const Facturar = () => {
           <label className="font-semibold text-normal text-white max-md:text-sm">
             Cliente:
           </label>
-          <div className="px-10 py-3 text-center shadow-lg shadow-black/20 font-semibold bg-white outline-none placeholder:text-black/50 w-50 max-md:text-sm max-md:py-2 max-md:px-3">
+          <div className="px-10 py-3 text-center rounded-full bg-white outline-none placeholder:text-black/50 w-50 max-md:text-sm max-md:py-2 max-md:px-3">
             {clienteId[0]?.attributes.nombre}{" "}
             {clienteId[0]?.attributes.apellido}
           </div>
@@ -412,7 +411,7 @@ export const Facturar = () => {
           <label className="font-semibold text-normal text-white max-md:text-sm">
             Localidad:
           </label>
-          <div className="px-10 py-3 text-center shadow-lg shadow-black/20 font-semibold bg-white outline-none placeholder:text-black/50 w-50 max-md:text-sm max-md:py-2 max-md:px-3">
+          <div className="px-10 py-3 text-center rounded-full bg-white outline-none placeholder:text-black/50 w-50 max-md:text-sm max-md:py-2 max-md:px-3">
             {clienteId[0]?.attributes.localidad}
           </div>
         </div>
@@ -420,26 +419,26 @@ export const Facturar = () => {
         <div className="flex flex-col gap-5">
           <div className="flex gap-3 items-center">
             <label className="font-semibold text-normal text-white max-md:text-sm">
-              Selecciona perfil a facturar:
+              Cantidad de barras:
             </label>
             <input
               onClick={() => setSeleccionar(!seleccionar)}
               type="text"
-              className="px-0 py-3 text-center rounded-full bg-white outline-none placeholder:text-black/50 w-auto max-md:text-sm max-md:py-2 max-md:px-3 max-md:w-[110px] font-semibold cursor-pointer hover:bg-slate-950 hover:text-white hover:translate-x-2 transition-all ease-in-out"
+              className="px-0 py-3 text-center rounded-full bg-white outline-none placeholder:text-black/50 w-auto max-md:text-sm max-md:py-2 max-md:px-3 max-md:w-[110px]"
               value={"Seleccionar"}
             />
             <div
               className={
                 !seleccionar
                   ? "hidden"
-                  : `bg-white shadow-2xl shadow-black/40 p-10 absolute left-3 w-[98%] max-md:w-full flex flex-col space-y-5`
+                  : `bg-white shadow-lg shadow-black/30 p-10 rounded-xl absolute left-[5%] w-[90%] max-md:w-full max-md:left-0 flex flex-col space-y-5`
               }
             >
               <div
                 onClick={() => setSeleccionar(!seleccionar)}
-                className="absolute top-0 right-0 p-3 text-[36px] font-bold cursor-pointer hover:text-primary transition-all ease-in-out"
+                className="absolute top-0 right-0 p-5 text-2xl font-bold cursor-pointer max-md:text-xl hover:text-primary transition-all ease-in-out"
               >
-                <AiFillCloseCircle className="text-black-600" />
+                X
               </div>
 
               <div>
@@ -449,94 +448,31 @@ export const Facturar = () => {
                 />
               </div>
 
-              <div className="h-[300px] max-md:h-[200px] overflow-y-scroll scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-200">
-                <table className="w-full">
-                  <thead className="w-full">
-                    <tr className="w-full">
-                      <div className="w-full">
-                        {resultado.length ? (
-                          <>
-                            <th className="text-sm border-gray-900 border-2 py-2 px-[3px]">
-                              codigo
-                            </th>
-                            <th className="text-sm border-gray-900 border-2 py-2 px-[3px]">
-                              colores
-                            </th>
-                            <th className="text-sm border-gray-900 border-2 py-2 px-[3px]">
-                              categoria
-                            </th>
-                            <th className="text-sm border-gray-900 border-2 py-2 px-[3px]">
-                              Barras en stock
-                            </th>
-                            <th className="text-sm border-gray-900 border-2 py-2 px-[3px]">
-                              Peso neto barra
-                            </th>
-                            <th className="text-sm border-gray-900 border-2 py-2 px-[3px]">
-                              Detalle
-                            </th>
-                            <th className="text-sm border-gray-900 border-2 py-2 px-[3px]">
-                              Adjuntar perfil
-                            </th>
-                          </>
-                        ) : (
-                          ""
-                        )}
-
-                        {resultado.length ? (
-                          resultado.map((i) => (
-                            <tr
-                              key={i.id}
-                              className="bg-primary border-2 border-gray-900 w-full"
-                            >
-                              <th className="text-[13px] p-2 border-r-[2px] border-black text-white">
-                                {i.attributes.codigo}
-                              </th>
-                              <th className="text-[13px] p-2 border-r-[2px] border-black text-white">
-                                {i.attributes.colores}
-                              </th>
-                              <th className="text-[13px] p-2 border-r-[2px] border-black text-white">
-                                {i.attributes.categoria}
-                              </th>
-                              <th className="text-[13px] p-2 border-r-[2px] border-black text-white">
-                                {i.attributes.cantidad}
-                              </th>
-                              <th className="text-[13px] p-2 border-r-[2px] border-black text-white">
-                                {i.attributes.kg_estimado_barra} kg
-                              </th>
-                              <th className="text-[13px] p-2 border-r-[2px] border-black text-white capitalize">
-                                {i.attributes.nombre}
-                              </th>
-                              <th className="text-sm p-2 border-r-[2px] border-black text-white">
-                                <div
-                                  onClick={() => {
-                                    handleModal(),
-                                      handlePerfilSeleccionadoId(i.id);
-                                  }}
-                                  className="bg-black px-4 py-2 rounded-lg cursor-pointer hover:bg-black/80 max-md:text-xs text-center"
-                                >
-                                  Seleccionar perfil
-                                </div>
-                              </th>
-                            </tr>
-                          ))
-                        ) : (
-                          <div className="w-full flex justify-center mt-5">
-                            <span className="text-red-500 font-bold text-lg w-full">
-                              No se encuentra ningun perfil con ese nombre.
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    </tr>
-                  </thead>
-                </table>
+              <div className="max-md:grid-cols-2 grid grid-cols-3 gap-4 h-[300px] max-md:h-[200px] overflow-y-scroll scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-200 px-6">
+                {resultado.length ? (
+                  resultado.map((p) => (
+                    <CardSeleccionPerfil
+                      key={p.id}
+                      p={p}
+                      handleModal={handleModal}
+                      handlePerfilSeleccionadoId={handlePerfilSeleccionadoId}
+                      setSeleccionar={setSeleccionar}
+                    />
+                  ))
+                ) : (
+                  <div className="w-full flex justify-center">
+                    <span className="text-red-500 font-bold text-lg w-full">
+                      No se encuentra ningun perfil con ese nombre.
+                    </span>
+                  </div>
+                )}
                 {modal && (
-                  <div className="absolute top-[50%] left-[35%] flex flex-col gap-2 bg-white shadow-2xl drop-shadow-2xl shadow-black/50 py-4 px-2 rounded  duration-500 max-md:left-[5%] max-md:w-[90%] max-md:top-[10px]">
+                  <div className="absolute top-[50%] left-[30%] flex flex-col gap-2 bg-white shadow-xl drop-shadow-2xl shadow-black/50 py-4 px-2 rounded-lg  duration-500 max-md:left-[5%] max-md:w-[90%] max-md:top-[10px]">
                     <div
                       onClick={() => handleModal()}
-                      className="text-black font-bold text-[36px] px-1 flex justify-end cursor-pointer hover:text-primary transition-all ease-in-out"
+                      className="text-black font-bold text-[19px] px-4 flex justify-end cursor-pointer hover:text-primary transition-all ease-in-out"
                     >
-                      <AiFillCloseCircle />
+                      X
                     </div>
                     <form
                       onSubmit={onCreatePerfilSeleccionado}
@@ -596,6 +532,37 @@ export const Facturar = () => {
                           className="font-bold text-primary capitalize bg-transparent outline-none max-md:text-sm max-md:w-[60px]"
                         />
                       </div>
+                      <div>
+                        <label
+                          className='className="text-sm font-bold text-black capitalize max-md:text-sm'
+                          htmlFor=""
+                        >
+                          Cliente:{" "}
+                        </label>
+                        <input
+                          type="text"
+                          {...register("cliente", {
+                            required: true,
+                          })}
+                          className="font-bold text-primary capitalize bg-transparent outline-none max-md:text-sm"
+                        />
+                      </div>
+                      <div>
+                        <label
+                          className='className="text-sm font-bold text-black capitalize max-md:text-sm'
+                          htmlFor=""
+                        >
+                          ID:{" "}
+                        </label>
+                        <input
+                          type="number"
+                          {...register("slug", {
+                            required: true,
+                          })}
+                          className="font-bold text-primary capitalize bg-transparent outline-none max-md:text-sm"
+                        />
+                      </div>
+
                       <input
                         {...register("barras", {
                           required: true,
@@ -634,9 +601,9 @@ export const Facturar = () => {
             <div className="absolute top-[20%] left-[30%] flex flex-col gap-2 bg-white shadow-xl drop-shadow-2xl shadow-black/50 py-4 px-2 rounded-lg  duration-500 max-md:left-[5%] max-md:w-[90%] max-md:top-[10px]">
               <div
                 onClick={() => setEditarModal(!editarModal)}
-                className="text-black font-bold text-[36px] px-1 flex justify-end cursor-pointer hover:text-primary transition-all ease-in-out"
+                className="text-black font-bold text-[19px] px-4 flex justify-end cursor-pointer hover:text-primary transition-all ease-in-out"
               >
-                <AiFillCloseCircle />
+                X
               </div>
               <form
                 onSubmit={onEditPerfilSeleccionado}
@@ -696,6 +663,37 @@ export const Facturar = () => {
                     className="font-bold text-primary capitalize bg-transparent outline-none max-md:text-sm max-md:w-[60px]"
                   />
                 </div>
+                <div>
+                  <label
+                    className='className="text-sm font-bold text-black capitalize max-md:text-sm'
+                    htmlFor=""
+                  >
+                    Cliente:{" "}
+                  </label>
+                  <input
+                    type="text"
+                    {...register("cliente", {
+                      required: true,
+                    })}
+                    className="font-bold text-primary capitalize bg-transparent outline-none max-md:text-sm"
+                  />
+                </div>
+                <div>
+                  <label
+                    className='className="text-sm font-bold text-black capitalize max-md:text-sm'
+                    htmlFor=""
+                  >
+                    ID:{" "}
+                  </label>
+                  <input
+                    type="number"
+                    {...register("slug", {
+                      required: true,
+                    })}
+                    className="font-bold text-primary capitalize bg-transparent outline-none max-md:text-sm"
+                  />
+                </div>
+
                 <input
                   {...register("barras", {
                     required: true,
@@ -721,92 +719,54 @@ export const Facturar = () => {
               </form>
             </div>
           )}
-          <div className="bg-white w-full p-4 shadow-lg shadow-black/30 overflow-y-scroll  scrollbar cursor-pointer scrollbar-thumb-gray-900 scrollbar-track-gray-200 h-[300px]">
-            <table className="w-full">
-              <thead className="w-full">
-                <tr className="w-full">
-                  <div className="w-full">
-                    {perfilId.length ? (
-                      <>
-                        <th className="text-sm border-gray-900 border-2 py-2 px-[6px] w-[120px]">
-                          cantidad
-                        </th>
-                        <th className="text-sm border-gray-900 border-2 py-2 px-[6px] w-[160px]">
-                          codigo
-                        </th>
-                        <th className="text-sm border-gray-900 border-2 py-2 px-[6px] w-[160px]">
-                          kg total
-                        </th>
-                        <th className="text-sm border-gray-900 border-2 py-2 px-[6px] w-[160px]">
-                          colores
-                        </th>
-                        <th className="text-sm border-gray-900 border-2 py-2 px-[6px] w-[160px]">
-                          categoria
-                        </th>
-                        <th className="text-sm border-gray-900 border-2 py-2 px-[6px] w-[160px]">
-                          Eliminar
-                        </th>
-                        <th className="text-sm border-gray-900 border-2 py-2 px-[6px] w-[160px]">
-                          Editar
-                        </th>
-                      </>
-                    ) : (
-                      <span className="text-xl font-semibold flex justify-center">
-                        No se encuentra cargado nada empieza a facturar.
-                      </span>
-                    )}
-                    {perfilId.map((p) => (
-                      <tr
-                        key={p.id}
-                        className="bg-primary border-2 border-gray-900 w-full"
-                      >
-                        <th className="text-[13px] px-2 py-3 border-r-[2px] border-black text-white">
-                          {p.attributes.barras}
-                        </th>
-                        <th className="text-[13px] px-2 py-3 border-r-[2px] border-black text-white">
-                          {p.attributes.codigo}
-                        </th>
-                        <th className="text-[13px] px-2 py-3 border-r-[2px] border-black text-white">
-                          {" "}
-                          {p.attributes.kg} kg
-                        </th>
-                        <th className="text-[13px] px-2 py-3 border-r-[2px] border-black text-white">
-                          {" "}
-                          {p.attributes.color}
-                        </th>
-                        <th className="text-[13px] px-2 py-3 border-r-[2px] border-black text-white">
-                          {" "}
-                          {p.attributes.categoria}
-                        </th>
-                        <th className="border-r-[2px] border-black">
-                          <div className="flex items-center content-center justify-center h-full">
-                            <AiFillCloseCircle
-                              className="text-red-400 border-white border-[1px] rounded-full hover:scale-[1.05] hover:text-red-500 transition-all ease-in-out text-3xl"
-                              onClick={() => handleDelete(p.id)}
-                            />
-                          </div>
-                        </th>
-                        <th className="border-r-[2px] border-black">
-                          <div className="flex items-center content-center justify-center h-full">
-                            <AiFillEdit
-                              className="text-yellow-500 text-3xl hover:scale-[1.05] hover:text-yellow-600 transition-all ease-in-out"
-                              onClick={() => {
-                                {
-                                  handlePerfilSeleccionadoId(p.id),
-                                    setEditarModal(!editarModal);
-                                }
-                              }}
-                            />
-                          </div>
-                        </th>
-                      </tr>
-                    ))}
-                  </div>
-                </tr>
-              </thead>
-            </table>
+
+          <div className="bg-white p-4 rounded-lg grid grid-cols-3 max-md:grid-cols-1 justify-items-center gap-2 overflow-y-scroll h-[200px]">
+            {perfilId.map((p) => (
+              <div
+                key={p.id}
+                className="bg-primary rounded-lg flex justify-between p-4 gap-4 h-[132px] w-full shadow-md shadow-black/30"
+              >
+                <div className="grid grid-cols-2 max-md:grid-cols-2 items-center justify-center justify-items-center gap-2 w-full">
+                  <span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
+                    {p.attributes.barras} brs
+                  </span>
+                  <span className="capitalizetext-black capitalize gap-[2px] bg-white px-1 py-1 justify-center rounded-full text-xs font-bold w-full flex items-center max-md:text-xs">
+                    <span className="text-primary">Cod:</span>{" "}
+                    {p.attributes.codigo}
+                  </span>
+                  <span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
+                    {p.attributes.kg} kg
+                  </span>
+                  <span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
+                    {p.attributes.color}
+                  </span>
+                  <span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
+                    {p.attributes.categoria}
+                  </span>
+                </div>
+
+                <div className="flex flex-col justify-center items-center gap-2">
+                  <input
+                    className="bg-red-500 px-3 py-2 text-white rounded-full w-[40px] h-[40px] text-sm text-center outline-none cursor-pointer max-md:text-xs"
+                    value={"X"}
+                    onClick={() => handleDelete(p.id)}
+                  />
+                  <input
+                    className="bg-green-500 px-3 py-2 text-white rounded-full w-[40px] h-[40px] text-sm text-center outline-none cursor-pointer max-md:text-xs"
+                    value={"E"}
+                    onClick={() => {
+                      {
+                        handlePerfilSeleccionadoId(p.id),
+                          setEditarModal(!editarModal);
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+            ))}
           </div>
         </div>
+
         {/* SEPARADO */}
 
         <form onSubmit={onSubmit} className="flex flex-col space-y-6">
@@ -817,7 +777,7 @@ export const Facturar = () => {
             <input
               {...register("total_kilos_herrero", { required: true })}
               type="text"
-              className="px-0 py-3 text-center w-40 shadow-lg shadow-black/20 font-semibold bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]"
+              className="px-0 py-3 text-center rounded-full bg-white outline-none placeholder:text-black/50 w-auto max-md:text-sm max-md:w-[100px]"
             />
 
             {/* <div>{totalKgHerrero()}</div> */}
@@ -829,7 +789,7 @@ export const Facturar = () => {
             <input
               {...register("total_kilos_modena", { required: true })}
               type="text"
-              className="px-0 py-3 text-center w-40 shadow-lg shadow-black/20 font-semibold bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]"
+              className="px-0 py-3 text-center rounded-full bg-white outline-none placeholder:text-black/50 w-auto max-md:text-sm max-md:w-[100px]"
             />
             {/* <div>{totalKgModena()}</div> */}
           </div>
@@ -840,7 +800,7 @@ export const Facturar = () => {
             <input
               {...register("total_kilos_modena_a30", { required: true })}
               type="text"
-              className="px-0 py-3 text-center w-40 shadow-lg shadow-black/20 font-semibold bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]"
+              className="px-0 py-3 text-center rounded-full bg-white outline-none placeholder:text-black/50 w-auto max-md:text-sm max-md:w-[100px]"
             />
             {/* <div>{totalKgModena()}</div> */}
           </div>
@@ -848,7 +808,7 @@ export const Facturar = () => {
             <label className="font-semibold text-normal text-white max-md:text-sm">
               Total de barra perfiles:
             </label>
-            <div className="px-0 py-3 text-center w-40 shadow-lg shadow-black/20 font-semibold bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]">
+            <div className="px-0 text-center rounded-full bg-white w-[200px] py-3 max-md:text-sm max-md:w-[100px]">
               {/* {totalBarras()} */}
               {(clienteId[0]?.attributes.nombre ===
                 perfilId[0]?.attributes?.cliente &&
@@ -871,7 +831,7 @@ export const Facturar = () => {
               onChange={"precio_herrero"}
               {...register("precio_herrero", { required: true })}
               type="number"
-              className="px-0 py-3 text-center w-40 shadow-lg shadow-black/20 font-semibold bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]"
+              className="px-0 py-3 text-center rounded-full bg-white outline-none placeholder:text-black/50 w-auto max-md:text-sm max-md:w-[100px]"
             />
           </div>
           <div className="flex gap-3 items-center">
@@ -887,7 +847,7 @@ export const Facturar = () => {
               step="0.01"
               {...register("precio_modena", { required: true })}
               type="number"
-              className="px-0 py-3 text-center w-40 shadow-lg shadow-black/20 font-semibold bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]"
+              className="px-0 py-3 text-center rounded-full bg-white outline-none placeholder:text-black/50 w-auto max-md:text-sm max-md:w-[100px]"
             />
           </div>
           <div className="flex gap-3 items-center">
@@ -903,7 +863,7 @@ export const Facturar = () => {
               step="0.01"
               {...register("precio_modena_a30", { required: true })}
               type="number"
-              className="px-0 py-3 text-center w-40 shadow-lg shadow-black/20 font-semibold bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]"
+              className="px-0 py-3 text-center rounded-full bg-white outline-none placeholder:text-black/50 w-auto max-md:text-sm max-md:w-[100px]"
             />
           </div>
           <div className="flex gap-3 items-center">
@@ -918,7 +878,7 @@ export const Facturar = () => {
             <input
               {...register("fecha_pago", { required: true })}
               type="date"
-              className="px-0 py-3 text-center w-40 shadow-lg shadow-black/20 font-semibold bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px] cursor-pointer"
+              className="px-6 py-3 rounded-lg bg-white outline-none placeholder:text-black/60 w-auto"
             />
           </div>
           <div className="flex gap-3 items-center">

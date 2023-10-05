@@ -302,7 +302,7 @@ export const Presupuesto = () => {
         <div className="flex flex-col gap-5">
           <div className="flex gap-3 items-center">
             <label className="font-semibold text-normal text-white max-md:text-sm">
-              Cantidad de barras:
+              Selecciona Perfil a presupuestar:
             </label>
             <input
               onClick={() => setSeleccionar(!seleccionar)}
