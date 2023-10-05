@@ -8,6 +8,7 @@ export const Home = () => {
   const [usuario, setUsuario] = useState([]);
   const [perfil, setPerfil] = useState([]);
   const [clientes, setClientes] = useState([]);
+  const [estadistica, setEstadistica] = useState([]);
 
   useEffect(() => {
     async function loadData() {
@@ -39,6 +40,18 @@ export const Home = () => {
         }/clientes?pagination[start]=0&pagination[limit]=1000`
       );
       setClientes(res.data.data);
+    }
+
+    loadData();
+  }, []);
+  useEffect(() => {
+    async function loadData() {
+      const res = await axios.get(
+        `${
+          import.meta.env.VITE_API_URL
+        }/estadisticas?pagination[start]=0&pagination[limit]=1000`
+      );
+      setEstadistica(res.data.data);
     }
 
     loadData();
@@ -76,8 +89,8 @@ export const Home = () => {
     }, 0);
   };
   const totalPerfilesVendidos = () => {
-    return clientes.reduce((sum, p) => {
-      return sum + Number(p.attributes.barras_compradas);
+    return estadistica.reduce((sum, p) => {
+      return sum + Number(p.attributes.total_barras);
     }, 0);
   };
 

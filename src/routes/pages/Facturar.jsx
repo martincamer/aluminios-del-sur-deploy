@@ -162,6 +162,7 @@ export const Facturar = () => {
   };
 
   //Actualizar put clientes enviar datos
+  console.log(perfilId);
 
   const onSubmit = handleSubmit(
     async ({
@@ -176,6 +177,12 @@ export const Facturar = () => {
       precio_modena_a30,
       fecha_pago,
       barras_compradas,
+      nombre,
+      total_kilos,
+      apellido,
+      total_precio_final,
+      datos_perfiles,
+      total_barras,
     }) => {
       axios.put(`${import.meta.env.VITE_API_URL}/clientes/${params.id}`, {
         data: {
@@ -194,6 +201,30 @@ export const Facturar = () => {
           barras: totalBarras(),
           barras_compradas: totalBarrasCompradas() + totalBarras(),
           fecha_pago: fecha_pago,
+        },
+      });
+
+      axios.post(`${import.meta.env.VITE_API_URL}/estadisticas`, {
+        data: {
+          nombre: clienteId[0]?.attributes.nombre,
+          total_kilos:
+            total_kilos_herrero + total_kilos_modena + total_kilos_modena_a30,
+          apellido: clienteId[0]?.attributes.apellido,
+          total_precio_final:
+            total_kilos_herrero * precio_herrero +
+            total_kilos_modena * precio_modena +
+            total_kilos_modena_a30 * precio_modena_a30,
+          datos_perfiles: perfilId.map(function (e) {
+            return {
+              codigo: e.attributes.codigo,
+              barras: e.attributes.barras,
+              cliente: e.attributes.cliente,
+              color: e.attributes.color,
+              kg: e.attributes.kg,
+              slug: e.attributes.slug,
+            };
+          }),
+          total_barras: totalBarras(),
         },
       });
 

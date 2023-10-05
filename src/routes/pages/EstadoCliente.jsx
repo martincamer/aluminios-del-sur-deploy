@@ -170,7 +170,7 @@ export const EstadoCliente = () => {
                           onClick={() => onSubmit(i.id)}
                           className="bg-red-400 text-white p-2 rounded-lg text-sm cursor-pointer"
                         >
-                          Resetear Cliente
+                          Resetear
                         </button>
                       </div>
                     </th>
@@ -189,7 +189,7 @@ export const EstadoCliente = () => {
                             } text-white p-2 rounded-lg text-sm cursor-pointer`}
                           >
                             {i.attributes.total_pagar === 0
-                              ? "No hay nada a cargar"
+                              ? "No hay facturado"
                               : "Estado Pendiente"}
                           </p>
                         )}

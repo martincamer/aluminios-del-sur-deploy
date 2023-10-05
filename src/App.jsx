@@ -26,6 +26,8 @@ import {
   EditarEstadoCliente,
   Presupuesto,
   EditarCliente,
+  ComprasClientes,
+  ComprasClientesVista,
   // OlvidePassword,
   // Register,
 } from "./routes/pages";
@@ -203,6 +205,22 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <EditarCliente />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/compras-clientes",
+        element: (
+          <ProtectedRoute>
+            <ComprasClientes />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/compras-clientes/:apellido",
+        element: (
+          <ProtectedRoute>
+            <ComprasClientesVista />
           </ProtectedRoute>
         ),
       },
