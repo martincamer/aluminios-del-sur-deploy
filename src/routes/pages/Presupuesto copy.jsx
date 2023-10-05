@@ -118,7 +118,6 @@ export const Presupuesto = () => {
       );
       setPerfil(res.data.data);
     }
-
     load();
   }, []);
 
@@ -269,10 +268,10 @@ export const Presupuesto = () => {
           Volver al clientes
         </Link>
       </div>
-      <div className="bg-primary p-10 w-2/3 max-md:w-full mx-auto shadow-2xl shadow-black/30 space-y-6 relative">
+      <div className="bg-primary p-10 rounded-lg w-2/3 max-md:w-full mx-auto shadow-2xl shadow-black/30 space-y-6 relative">
         <div className="flex justify-center">
           <h3 className="text-white text-xl max-md:text-sm text-center">
-            Presupuesto Cliente{" "}
+            Cargar Pago - Facturación Cliente{" "}
             <span className="font-semibold underline">
               {clienteId[0]?.attributes.nombre}{" "}
               {clienteId[0]?.attributes.apellido}
@@ -284,7 +283,7 @@ export const Presupuesto = () => {
           <label className="font-semibold text-normal text-white max-md:text-sm">
             Cliente:
           </label>
-          <div className="px-10 py-3 text-center shadow-lg shadow-black/20 font-semibold bg-white outline-none placeholder:text-black/50 w-50 max-md:text-sm max-md:py-2 max-md:px-3">
+          <div className="px-10 py-3 text-center rounded-full bg-white outline-none placeholder:text-black/50 w-50 max-md:text-sm max-md:py-2 max-md:px-3">
             {clienteId[0]?.attributes.nombre}{" "}
             {clienteId[0]?.attributes.apellido}
           </div>
@@ -294,7 +293,7 @@ export const Presupuesto = () => {
           <label className="font-semibold text-normal text-white max-md:text-sm">
             Localidad:
           </label>
-          <div className="px-10 py-3 text-center shadow-lg shadow-black/20 font-semibold bg-white outline-none placeholder:text-black/50 w-50 max-md:text-sm max-md:py-2 max-md:px-3">
+          <div className="px-10 py-3 text-center rounded-full bg-white outline-none placeholder:text-black/50 w-50 max-md:text-sm max-md:py-2 max-md:px-3">
             {clienteId[0]?.attributes.localidad}
           </div>
         </div>
@@ -307,14 +306,14 @@ export const Presupuesto = () => {
             <input
               onClick={() => setSeleccionar(!seleccionar)}
               type="text"
-              className="px-0 py-3 text-center rounded-full bg-white outline-none placeholder:text-black/50 w-auto max-md:text-sm max-md:py-2 max-md:px-3 max-md:w-[110px] font-semibold cursor-pointer hover:bg-slate-950 hover:text-white hover:translate-x-2 transition-all ease-in-out"
+              className="px-0 py-3 text-center rounded-full bg-white outline-none placeholder:text-black/50 w-auto max-md:text-sm max-md:py-2 max-md:px-3 max-md:w-[110px] font-semibold cursor-pointer hover:bg-yellow-300 hover:text-blue-700 hover:translate-x-2 transition-all ease-in-out"
               value={"Seleccionar"}
             />
             <div
               className={
                 !seleccionar
                   ? "hidden"
-                  : `bg-white shadow-lg shadow-black/30 p-10 rounded-xl absolute left-3 max-md:w-full max-md:left-0 flex flex-col space-y-5 w-[98%]`
+                  : `bg-white shadow-lg shadow-black/30 p-10 rounded-xl absolute left-[5%] w-[90%] max-md:w-full max-md:left-0 flex flex-col space-y-5`
               }
             >
               <div
@@ -331,79 +330,24 @@ export const Presupuesto = () => {
                 />
               </div>
 
-              <div className="h-[300px] max-md:h-[200px] px-2 overflow-y-scroll scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-200">
-                <table className="w-full">
-                  <thead className="w-full">
-                    <tr className="w-full">
-                      <div className="w-full">
-                        <th className="text-sm border-gray-900 border-2 py-2 px-[3px]">
-                          Numero
-                        </th>
-                        <th className="text-sm border-gray-900 border-2 py-2 px-[3px]">
-                          codigo
-                        </th>
-                        <th className="text-sm border-gray-900 border-2 py-2 px-[3px]">
-                          colores
-                        </th>
-                        <th className="text-sm border-gray-900 border-2 py-2 px-[3px]">
-                          categoria
-                        </th>
-                        <th className="text-sm border-gray-900 border-2 py-2 px-[3px]">
-                          Barras
-                        </th>
-                        <th className="text-sm border-gray-900 border-2 py-2 px-[3px]">
-                          Peso neto barra
-                        </th>
-                        <th className="text-sm border-gray-900 border-2 py-2 px-[3px]">
-                          Detalle
-                        </th>
-                        <th className="text-sm border-gray-900 border-2 py-2 px-[3px]">
-                          Adjuntar perfil
-                        </th>
-
-                        {resultado.map((i) => (
-                          <tr
-                            key={i.id}
-                            className="bg-primary border-2 border-gray-900 w-full"
-                          >
-                            <th className="text-[13px] p-2 border-r-[2px] border-black text-white">
-                              {i.id}
-                            </th>
-                            <th className="text-[13px] p-2 border-r-[2px] border-black text-white">
-                              {i.attributes.codigo}
-                            </th>
-                            <th className="text-[13px] p-2 border-r-[2px] border-black text-white">
-                              {i.attributes.colores}
-                            </th>
-                            <th className="text-[13px] p-2 border-r-[2px] border-black text-white">
-                              {i.attributes.categoria}
-                            </th>
-                            <th className="text-[13px] p-2 border-r-[2px] border-black text-white">
-                              {i.attributes.cantidad}
-                            </th>
-                            <th className="text-[13px] p-2 border-r-[2px] border-black text-white">
-                              {i.attributes.kg_estimado_barra}
-                            </th>
-                            <th className="text-[13px] p-2 border-r-[2px] border-black text-white">
-                              {i.attributes.nombre} kg
-                            </th>
-                            <th className="text-sm p-2 border-r-[2px] border-black text-white">
-                              <div
-                                onClick={() => {
-                                  handleModal(),
-                                    handlePerfilSeleccionadoId(i.id);
-                                }}
-                                className="bg-black px-4 py-2 rounded-lg cursor-pointer hover:bg-black/80 max-md:text-xs text-center"
-                              >
-                                Seleccionar perfil
-                              </div>
-                            </th>
-                          </tr>
-                        ))}
-                      </div>
-                    </tr>
-                  </thead>
-                </table>
+              <div className="max-md:grid-cols-2 grid grid-cols-3 gap-4 h-[300px] max-md:h-[200px] overflow-y-scroll scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-200 px-6">
+                {resultado.length ? (
+                  resultado.map((p) => (
+                    <CardSeleccionPerfil
+                      key={p.id}
+                      p={p}
+                      handleModal={handleModal}
+                      handlePerfilSeleccionadoId={handlePerfilSeleccionadoId}
+                      setSeleccionar={setSeleccionar}
+                    />
+                  ))
+                ) : (
+                  <div className="w-full flex justify-center">
+                    <span className="text-red-500 font-bold text-lg w-full">
+                      No se encuentra ningun perfil con ese nombre.
+                    </span>
+                  </div>
+                )}
                 {modal && (
                   <div className="absolute top-[50%] left-[30%] flex flex-col gap-2 bg-white shadow-xl drop-shadow-2xl shadow-black/50 py-4 px-2 rounded-lg  duration-500 max-md:left-[5%] max-md:w-[90%] max-md:top-[10px]">
                     <div
@@ -513,75 +457,64 @@ export const Presupuesto = () => {
               </div>
             </div>
           </div>
-          <div className="bg-white w-full p-4 shadow-lg shadow-black/30 overflow-y-scroll  scrollbar cursor-pointer scrollbar-thumb-gray-900 scrollbar-track-gray-200 h-[300px]">
-            <table className="w-full">
-              <thead className="w-full">
-                <tr className="w-full">
-                  <div className="w-full">
-                    <th className="text-sm border-gray-900 border-2 py-2 px-[6px] w-[120px]">
-                      cantidad
-                    </th>
-                    <th className="text-sm border-gray-900 border-2 py-2 px-[6px] w-[160px]">
-                      codigo
-                    </th>
-                    <th className="text-sm border-gray-900 border-2 py-2 px-[6px] w-[160px]">
-                      kg total
-                    </th>
-                    <th className="text-sm border-gray-900 border-2 py-2 px-[6px] w-[160px]">
-                      colores
-                    </th>
-                    <th className="text-sm border-gray-900 border-2 py-2 px-[6px] w-[160px]">
-                      categoria
-                    </th>
-                    <th className="text-sm border-gray-900 border-2 py-2 px-[6px] w-[160px]">
-                      Eliminar
-                    </th>
-                    <th className="text-sm border-gray-900 border-2 py-2 px-[6px] w-[160px]">
-                      Editar
-                    </th>
-                    {perfilEnviado.map(
-                      (p) =>
-                        clienteId[0]?.attributes?.nombre === p.cliente && (
-                          <tr
-                            key={p.id}
-                            className="bg-primary border-2 border-gray-900 w-full"
-                          >
-                            <th className="text-[13px] p-2 border-r-[2px] border-black text-white">
-                              {p.cantidad}
-                            </th>
-                            <th className="text-[13px] p-2 border-r-[2px] border-black text-white">
-                              {p.codigo}
-                            </th>
-                            <th className="text-[13px] p-2 border-r-[2px] border-black text-white">
-                              {p.nuevoValor.toLocaleString("arg")}
-                            </th>
-                            <th className="text-[13px] p-2 border-r-[2px] border-black text-white">
-                              {p.colores}
-                            </th>
-                            <th className="text-[13px] p-2 border-r-[2px] border-black text-white">
-                              {p.categoria}
-                            </th>
-                            <th className="text-sm p-2 border-r-[2px] border-black text-white">
-                              <input
-                                className="bg-red-500 px-3 py-2 text-white rounded-full w-[40px] h-[40px] text-sm text-center outline-none cursor-pointer max-md:text-xs"
-                                value={"X"}
-                                onClick={() => addToDelete(p.id)}
-                              />
-                            </th>
-                            <th className="text-sm p-2 border-r-[2px] border-black text-white">
-                              <input
-                                className="bg-green-500 px-3 py-2 text-white rounded-full w-[40px] h-[40px] text-sm text-center outline-none cursor-pointer max-md:text-xs"
-                                value={"editars"}
-                                onClick={() => addToDelete(p.id)}
-                              />
-                            </th>
-                          </tr>
-                        )
-                    )}
+
+          <div className="bg-white p-4 rounded-lg grid grid-cols-3 max-md:grid-cols-1 justify-items-center gap-2 overflow-y-scroll h-[200px]">
+            {perfilEnviado.map(
+              (p) =>
+                clienteId[0]?.attributes?.nombre === p.cliente && (
+                  <div
+                    key={p.id}
+                    className="bg-primary rounded-lg flex justify-between p-4 gap-4 h-[132px] w-full shadow-md shadow-black/30"
+                  >
+                    <div className="grid grid-cols-2 max-md:grid-cols-2 items-center justify-center justify-items-center gap-2 w-full">
+                      {clienteId[0]?.attributes?.nombre === p.cliente && (
+                        <span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
+                          {p.cantidad} brs
+                        </span>
+                      )}
+                      {clienteId[0]?.attributes?.nombre === p.cliente && (
+                        <span className="capitalizetext-black capitalize gap-[2px] bg-white px-1 py-1 justify-center rounded-full text-xs font-bold w-full flex items-center max-md:text-xs">
+                          <span className="text-primary">Cod:</span> {p.codigo}
+                        </span>
+                      )}
+                      {clienteId[0]?.attributes?.nombre === p.cliente && (
+                        <span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
+                          {p.nuevoValor.toLocaleString("arg")} kg
+                        </span>
+                      )}
+                      {clienteId[0]?.attributes?.nombre === p.cliente && (
+                        <span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
+                          {p.colores}
+                        </span>
+                      )}
+                      {clienteId[0]?.attributes?.nombre === p.cliente && (
+                        <span className="capitalize text-black bg-white px-1 py-1 justify-center rounded-full text-xs font-semibold w-full flex items-center max-md:text-xs">
+                          {p.categoria}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="flex flex-col justify-center items-center gap-2">
+                      <input
+                        className="bg-red-500 px-3 py-2 text-white rounded-full w-[40px] h-[40px] text-sm text-center outline-none cursor-pointer max-md:text-xs"
+                        value={"X"}
+                        onClick={() => addToDelete(p.id)}
+                      />
+                      {/* <input
+										className="bg-green-500 px-3 py-2 text-white rounded-full w-[40px] h-[40px] text-sm text-center outline-none cursor-pointer max-md:text-xs"
+										value={'E'}
+										onClick={() => {
+											{
+												handlePerfilSeleccionadoId(p.id),
+													handleModal(!modal),
+													setSeleccionar(!seleccionar);
+											}
+										}}
+									/> */}
+                    </div>
                   </div>
-                </tr>
-              </thead>
-            </table>
+                )
+            )}
           </div>
         </div>
 
@@ -595,9 +528,9 @@ export const Presupuesto = () => {
             <label className="font-semibold text-normal text-white max-md:text-sm">
               Total de kilos herrero:
             </label>
-            <div className="px-0 py-3 text-center w-40 shadow-lg shadow-black/20 font-semibold bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]">
-              {totalKgHerrero().toLocaleString("arg") || 0}
-              {/* {totalKgHerrero()} */}
+            <div className="px-0 py-3 text-center w-40 rounded-full bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]">
+              {/* {totalKgHerrero().toLocaleString("arg") || 0} */}
+              {totalKgHerrero()}
             </div>
 
             {/* <div>{totalKgHerrero()}</div> */}
@@ -606,7 +539,7 @@ export const Presupuesto = () => {
             <label className="font-semibold text-normal text-white max-md:text-sm">
               Total de kilos modena:
             </label>
-            <div className="px-0 py-3 text-center w-40 shadow-lg shadow-black/20 font-semibold bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]">
+            <div className="px-0 py-3 text-center w-40 rounded-full bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]">
               {totalKgModena().toLocaleString("arg") || 0}
             </div>
           </div>
@@ -614,7 +547,7 @@ export const Presupuesto = () => {
             <label className="font-semibold text-normal text-white max-md:text-sm">
               Total de kilos modena a-30:
             </label>
-            <div className="px-0 py-3 text-center w-40 shadow-lg shadow-black/20 font-semibold bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]">
+            <div className="px-0 py-3 text-center w-40 rounded-full bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]">
               {totalKgModenaA30().toLocaleString("arg") || 0}
             </div>
           </div>
@@ -622,7 +555,7 @@ export const Presupuesto = () => {
             <label className="font-semibold text-normal text-white max-md:text-sm">
               Total de barra perfiles:
             </label>
-            <div className="px-0 text-center shadow-lg shadow-black/20 font-semibold bg-white w-40 py-3 max-md:text-sm max-md:w-[100px]">
+            <div className="px-0 text-center rounded-full bg-white w-40 py-3 max-md:text-sm max-md:w-[100px]">
               {totalBarrasEnviado() || 0}
             </div>
           </div>
@@ -637,7 +570,7 @@ export const Presupuesto = () => {
               onChange={(e) => setPrecioKiloHerrero(e.target.value)}
               step="0.001"
               type="number"
-              className="px-0 text-center shadow-lg shadow-black/20 font-semibold bg-white w-40 py-3 max-md:text-sm max-md:w-[100px]"
+              className="px-0 py-3 text-center rounded-full bg-white outline-none placeholder:text-black/50 w-auto max-md:text-sm max-md:w-[100px]"
             />
           </div>
           <div className="flex gap-3 items-center">
@@ -650,7 +583,7 @@ export const Presupuesto = () => {
               onChange={(e) => setPrecioKiloModena(e.target.value)}
               step="0.001"
               type="number"
-              className="px-0 text-center shadow-lg shadow-black/20 font-semibold bg-white w-40 py-3 max-md:text-sm max-md:w-[100px]"
+              className="px-0 py-3 text-center rounded-full bg-white outline-none placeholder:text-black/50 w-auto max-md:text-sm max-md:w-[100px]"
             />
           </div>
           <div className="flex gap-3 items-center">
@@ -663,15 +596,24 @@ export const Presupuesto = () => {
               onChange={(e) => setPrecioKiloModenaA30(e.target.value)}
               step="0.001"
               type="number"
-              className="px-0 text-center shadow-lg shadow-black/20 font-semibold bg-white w-40 py-3 max-md:text-sm max-md:w-[100px]"
+              className="px-0 py-3 text-center rounded-full bg-white outline-none placeholder:text-black/50 w-auto max-md:text-sm max-md:w-[100px]"
             />
           </div>
+          {/* <div className="flex gap-3 items-center">
+						<label className="font-semibold text-normal text-white max-md:text-sm">
+							Seleccionar Fecha:
+						</label>
+						<input
+							type="date"
+							className="px-6 py-3 rounded-lg bg-white outline-none placeholder:text-black/60 w-auto"
+						/>
+					</div> */}
           <div className="flex gap-3 items-center">
             <label className="font-semibold text-normal text-white max-md:text-sm">
               Total a pagar:
             </label>
 
-            <div className="text-white bg-green-600 py-2 px-5 rounded-xl shadow-lg shadow-black/30 text-xl max-md:text-base font-bold">
+            <div className="text-white bg-green-600 py-2 px-5 rounded-xl text-xl max-md:text-base font-bold">
               ${TOTALPAGAR.toLocaleString("arg") || 0}
             </div>
           </div>
