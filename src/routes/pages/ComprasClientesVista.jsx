@@ -16,9 +16,9 @@ export const ComprasClientesVista = () => {
     async function loadData() {
       try {
         const res = await axios.get(
-          `${
-            import.meta.env.VITE_API_URL
-          }/clientes?populate=*&filters[apellido]=${params.apellido}`
+          `${import.meta.env.VITE_API_URL}/clientes?populate=*&filters[id]=${
+            params.apellido
+          }`
         );
         setCliente(res.data.data);
       } catch (error) {
@@ -34,7 +34,7 @@ export const ComprasClientesVista = () => {
         const res = await axios.get(
           `${
             import.meta.env.VITE_API_URL
-          }/estadisticas?populate=*&filters[apellido]=${params.apellido}`
+          }/estadisticas?populate=*&filters[slug]=${params.apellido}`
         );
         setEstadisticas(res.data.data);
       } catch (error) {
@@ -45,7 +45,7 @@ export const ComprasClientesVista = () => {
   }, []);
   console.log(estadisticas);
   console.log(cliente);
-  //   console.log(datos);
+  console.log(params);
 
   const fecha_actual = estadisticas[0]?.attributes.createdAt;
   const fechaCreada = new Date(fecha_actual);
@@ -196,6 +196,12 @@ export const ComprasClientesVista = () => {
                   >
                     Eliminar <AiFillCloseCircle className="text-2xl none" />
                   </div>
+                  {/* <div
+                    onClick={() => handleDelete(i.id)}
+                    className="absolute top-14 right-40 bg-green-500 py-2 px-6 rounded text-white font-bold uppercase cursor-pointer flex gap-5 hover:translate-x-1 hover:shadow-md hover:shadow-black/20 transition-all ease-in-out"
+                  >
+                    Factura <AiFillCloseCircle className="text-2xl none" />
+                  </div> */}
                 </table>
               </>
             ))

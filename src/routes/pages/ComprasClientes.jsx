@@ -111,7 +111,7 @@ export const ComprasClientes = () => {
                     <th className="border-r-[2px] border-black">
                       <div className="py-2 px-2 flex gap-2 items-center justify-center">
                         <Link
-                          to={`/compras-clientes/${i.attributes.apellido}`}
+                          to={`/compras-clientes/${i.id}`}
                           className="bg-orange-400 text-white p-2 rounded-lg text-sm cursor-pointer"
                         >
                           Ver compras realizadas

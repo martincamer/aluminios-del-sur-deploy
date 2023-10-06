@@ -518,6 +518,7 @@ export const Presupuesto = () => {
               <thead className="w-full">
                 <tr className="w-full">
                   <div className="w-full">
+                    {" "}
                     <th className="text-sm border-gray-900 border-2 py-2 px-[6px] w-[120px]">
                       cantidad
                     </th>

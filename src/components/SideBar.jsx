@@ -40,7 +40,7 @@ export const SideBar = () => {
             className="text-lg font-semibold text-white flex gap-2 items-center hover:underline transition-all hover:translate-x-1"
           >
             <BsFillQuestionCircleFill className="text-3xl text-white" /> Estado
-            de los Clientes <IoIosArrowForward />
+            de los Clientes P<IoIosArrowForward />
           </Link>
           <Link
             to={"/compras-clientes"}

@@ -183,6 +183,8 @@ export const Facturar = () => {
       total_precio_final,
       datos_perfiles,
       total_barras,
+      slug,
+      // pdf,
     }) => {
       axios.put(`${import.meta.env.VITE_API_URL}/clientes/${params.id}`, {
         data: {
@@ -214,6 +216,7 @@ export const Facturar = () => {
             total_kilos_herrero * precio_herrero +
             total_kilos_modena * precio_modena +
             total_kilos_modena_a30 * precio_modena_a30,
+          slug: clienteId[0].id,
           datos_perfiles: perfilId.map(function (e) {
             return {
               codigo: e.attributes.codigo,
@@ -225,6 +228,7 @@ export const Facturar = () => {
             };
           }),
           total_barras: totalBarras(),
+          // pdf: <PdfPerfil clienteId={clienteId} perfil={perfilId} />,
         },
       });
 
@@ -299,8 +303,6 @@ export const Facturar = () => {
     }
   );
 
-  // console.log(perfilSeleccionarEditar);
-
   const onEditPerfilSeleccionado = handleSubmit(
     async ({ codigo, color, categoria, barras, kg, slug, cliente }) => {
       await axios.put(`${import.meta.env.VITE_API_URL}/perfils/${obtenerId}`, {
@@ -365,9 +367,6 @@ export const Facturar = () => {
       return sum + Number(b.attributes.barras);
     }, 0);
   };
-
-  // console.log(totalBarrasCompradas());
-  // console.log(totalBarrasCompradas() + totalBarras());
 
   const totalKgHerrero = () => {
     return perfilId.reduce((sum, b) => {
@@ -573,10 +572,15 @@ export const Facturar = () => {
                       onSubmit={onCreatePerfilSeleccionado}
                       className="flex flex-col gap-3 max-md:gap-1"
                     >
+                      <div>
+                        <p className="text-sm font-semibold text-center underline">
+                          Cargar Perfil para facturar
+                        </p>
+                      </div>
                       {error ? (
                         <span className="bg-red-500 text-sm text-white p-2 rounded-lg text-center max-md:text-xs">
                           Selecciona una cantidad menor de:{" "}
-                          {perfilSeleccionado[0].attributes.cantidad}
+                          {perfilSeleccionado[0]?.attributes.cantidad}
                         </span>
                       ) : (
                         ""
@@ -627,25 +631,28 @@ export const Facturar = () => {
                           className="font-bold text-primary capitalize bg-transparent outline-none max-md:text-sm max-md:w-[60px]"
                         />
                       </div>
+                      <div className="flex gap-2">
+                        <label className='className="text-sm font-bold text-black capitalize max-md:text-sm'>
+                          Total de barras en stock:{" "}
+                        </label>
+                        <div className="font-bold text-primary max-md:text-sm">
+                          {perfilSeleccionado[0]?.attributes.cantidad}
+                        </div>
+                      </div>
                       <input
                         {...register("barras", {
                           required: true,
                         })}
-                        // value={cantidad}
-                        // onChange={e => setCantidad(e.target.value)}
                         type="number"
-                        placeholder="Cantidad de barras"
+                        placeholder="Selecciona Cantidad de Barras"
                         className="text-sm rounded-lg p-2 text-black placeholder:text-gray-900 outline-none bg-gray-200 shadow-md shadow-black/20 max-md:mb-2"
                       />
 
                       <input
                         {...register("kg", { required: true })}
-                        // value={kilos}
-                        // onChange={e => setKilos(e.target.value)}
                         type="number"
-                        // inputmode="decimal"
                         step="0.001"
-                        placeholder="Cantidad de kilos"
+                        placeholder="Selecciona Cantidad de Kilos"
                         className="text-sm rounded-lg p-2 text-black placeholder:text-gray-900 outline-none bg-gray-200 shadow-md shadow-black/20 max-md:mb-2"
                       />
 
@@ -671,12 +678,17 @@ export const Facturar = () => {
               </div>
               <form
                 onSubmit={onEditPerfilSeleccionado}
-                className="flex flex-col gap-3 max-md:gap-1"
+                className="flex flex-col gap-2"
               >
+                <div>
+                  <p className="text-sm font-semibold text-center underline">
+                    Editar Perfil Seleccionado
+                  </p>
+                </div>
                 {error ? (
                   <span className="bg-red-500 text-sm text-white p-2 rounded-lg text-center max-md:text-xs">
                     Selecciona una cantidad menor de:{" "}
-                    {perfilSeleccionado[0].attributes.cantidad}
+                    {perfilSeleccionado[0]?.attributes.cantidad}
                   </span>
                 ) : (
                   ""
@@ -726,6 +738,14 @@ export const Facturar = () => {
                     })}
                     className="font-bold text-primary capitalize bg-transparent outline-none max-md:text-sm max-md:w-[60px]"
                   />
+                </div>
+                <div className="flex gap-2">
+                  <label className='className="text-sm font-bold text-black capitalize max-md:text-sm'>
+                    Total de barras en stock:{" "}
+                  </label>
+                  <div className="font-bold text-primary max-md:text-sm">
+                    {perfilSeleccionado[0]?.attributes.cantidad}
+                  </div>
                 </div>
                 <input
                   {...register("barras", {

@@ -81,6 +81,8 @@ export const EstadoCliente = () => {
     );
   }
 
+  let total = resultado.map((total) => total.attributes.total_pagar);
+
   return (
     <div className="flex h-full max-h-full min-h-full">
       <SideBar />
@@ -103,33 +105,35 @@ export const EstadoCliente = () => {
           <thead>
             <tr>
               <div className="w-full">
-                <th className="text-sm border-gray-900 border-2 py-2 px-2">
-                  Numero
-                </th>
-                <th className="text-sm border-gray-900 border-2 py-2 px-4">
-                  Nombre - Cliente
-                </th>
-                <th className="text-sm border-gray-900 border-2 py-2 px-4">
-                  Total a Pagar
-                </th>
-                <th className="text-sm border-gray-900 border-2 py-2 px-4">
-                  Entrego
-                </th>
-                <th className="text-sm border-gray-900 border-2 py-2 px-4">
-                  Deuda
-                </th>
-                <th className="text-sm border-gray-900 border-2 py-2 px-4">
-                  Zona - Localidad
-                </th>
-                <th className="text-sm border-gray-900 border-2 py-2 px-4">
-                  Fecha de Entrega
-                </th>
-                <th className="text-sm border-gray-900 border-2 py-2 px-4">
-                  Campos de edición
-                </th>
-                <th className="text-sm border-gray-900 border-2 py-2 px-4">
-                  Pago Confirmado - No confirmado
-                </th>
+                <>
+                  <th className="text-sm border-gray-900 border-2 py-2 px-2">
+                    Numero
+                  </th>
+                  <th className="text-sm border-gray-900 border-2 py-2 px-4">
+                    Nombre - Cliente
+                  </th>
+                  <th className="text-sm border-gray-900 border-2 py-2 px-4">
+                    Total a Pagar
+                  </th>
+                  <th className="text-sm border-gray-900 border-2 py-2 px-4">
+                    Entrego
+                  </th>
+                  <th className="text-sm border-gray-900 border-2 py-2 px-4">
+                    Deuda
+                  </th>
+                  <th className="text-sm border-gray-900 border-2 py-2 px-4">
+                    Zona - Localidad
+                  </th>
+                  <th className="text-sm border-gray-900 border-2 py-2 px-4">
+                    Fecha de Entrega
+                  </th>
+                  <th className="text-sm border-gray-900 border-2 py-2 px-4">
+                    Campos de edición
+                  </th>
+                  <th className="text-sm border-gray-900 border-2 py-2 px-4">
+                    Pago Confirmado - No confirmado
+                  </th>
+                </>
 
                 {resultado.map((i) => (
                   <tr
