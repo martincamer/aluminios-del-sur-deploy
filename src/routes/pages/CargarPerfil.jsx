@@ -152,6 +152,8 @@ export const CargarPerfil = () => {
               <option value={"blanco ibera"}>blanco ibera</option>
               <option value={"negro"}>negro</option>
               <option value={"bronce"}>bronce</option>
+              <option value={"anodizado natural"}>anodizado natural</option>
+              <option value={"anodizado bronce"}>anodizado bronce</option>
               <option value={"natural"}>natural</option>
             </select>
           </div>
@@ -170,6 +172,7 @@ export const CargarPerfil = () => {
               <option value={"modena"}>modena</option>
               <option value={"modena a-30"}>modena a-30</option>
               <option value={"herrero"}>herrero</option>
+              <option value={"natural"}>natural</option>
             </select>
           </div>
         </div>

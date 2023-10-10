@@ -128,7 +128,7 @@ export const Clientes = () => {
                       {/* {i.attributes.total_kilos_herrero +
 												i.attributes.total_kilos_modena +
 												i.attributes.total_kilos_modena_a30} */}{" "}
-                      {i.attributes.kilos}
+                      {i.attributes.kilos.toLocaleString("arg")}
                     </th>
                     <th className="text-xs p-2 text-white border-r-[2px] border-black">
                       {i.attributes.localidad}

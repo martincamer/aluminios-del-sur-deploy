@@ -69,6 +69,10 @@ export const Facturar = () => {
         res.data.data[0].attributes.precio_modena_a30 || 0
       );
       setValue(
+        "precio_natural",
+        res.data.data[0].attributes.precio_natural || 0
+      );
+      setValue(
         "cliente",
         res.data.data[0].attributes.nombre || "No se encontro el cliente"
       );
@@ -172,9 +176,11 @@ export const Facturar = () => {
       total_kilos_herrero,
       total_kilos_modena,
       total_kilos_modena_a30,
+      total_kilos_natural,
       precio_herrero,
       precio_modena,
       precio_modena_a30,
+      precio_natural,
       fecha_pago,
       barras_compradas,
       nombre,
@@ -184,22 +190,27 @@ export const Facturar = () => {
       datos_perfiles,
       total_barras,
       slug,
-      // pdf,
     }) => {
       axios.put(`${import.meta.env.VITE_API_URL}/clientes/${params.id}`, {
         data: {
           total_kilos_herrero: total_kilos_herrero,
           total_kilos_modena: total_kilos_modena,
           total_kilos_modena_a30: total_kilos_modena_a30,
+          total_kilos_natural: total_kilos_natural,
           precio_herrero: precio_herrero,
           precio_modena: precio_modena,
+          precio_modena_a30: precio_modena_a30,
+          precio_natural: precio_natural,
           kilos: (kilos =
-            total_kilos_herrero + total_kilos_modena + total_kilos_modena_a30),
+            total_kilos_herrero +
+            total_kilos_modena +
+            total_kilos_modena_a30 +
+            total_kilos_natural),
           total_pagar: (total_pagar =
             total_kilos_herrero * precio_herrero +
             total_kilos_modena * precio_modena +
-            total_kilos_modena_a30 * precio_modena_a30),
-          precio_modena_a30: precio_modena_a30,
+            total_kilos_modena_a30 * precio_modena_a30 +
+            total_kilos_natural * precio_natural),
           barras: totalBarras(),
           barras_compradas: totalBarrasCompradas() + totalBarras(),
           fecha_pago: fecha_pago,
@@ -390,11 +401,20 @@ export const Facturar = () => {
     }, 0);
   };
 
+  const totalKgNatural = () => {
+    return perfilId.reduce((sum, b) => {
+      return (
+        sum + Number(b.attributes.categoria == "natural" && b.attributes.kg)
+      );
+    }, 0);
+  };
+
   useEffect(() => {
     setValue("total_kilos_herrero", totalKgHerrero());
     setValue("total_kilos_modena", totalKgModena());
     setValue("total_kilos_modena_a30", totalKgModenaA30());
-  }, [totalKgHerrero, totalKgModena, totalKgModenaA30]);
+    setValue("total_kilos_natural", totalKgNatural());
+  }, [totalKgHerrero, totalKgModena, totalKgModenaA30, totalKgNatural]);
 
   const clickToatFacturar = () => {
     toast.success("Facturado correctamente!", {
@@ -897,6 +917,17 @@ export const Facturar = () => {
           </div>
           <div className="flex gap-3 items-center">
             <label className="font-semibold text-normal text-white max-md:text-sm">
+              Total de kilos natural:
+            </label>
+            <input
+              {...register("total_kilos_natural", { required: true })}
+              type="text"
+              className="px-0 py-3 text-center w-40 shadow-lg shadow-black/20 font-semibold bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]"
+            />
+            {/* <div>{totalKgModena()}</div> */}
+          </div>
+          <div className="flex gap-3 items-center">
+            <label className="font-semibold text-normal text-white max-md:text-sm">
               Total de barra perfiles:
             </label>
             <div className="px-0 py-3 text-center w-40 shadow-lg shadow-black/20 font-semibold bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]">
@@ -953,6 +984,22 @@ export const Facturar = () => {
             <input
               step="0.01"
               {...register("precio_modena_a30", { required: true })}
+              type="number"
+              className="px-0 py-3 text-center w-40 shadow-lg shadow-black/20 font-semibold bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]"
+            />
+          </div>
+          <div className="flex gap-3 items-center">
+            {errors.precio_natural && (
+              <span className="bg-red-500 text-sm text-white rounded-lg p-3 text-center uppercase">
+                la fecha es requerida
+              </span>
+            )}
+            <label className="font-semibold text-normal text-white max-md:text-sm">
+              Precio de kilo natural:
+            </label>
+            <input
+              step="0.01"
+              {...register("precio_natural", { required: true })}
               type="number"
               className="px-0 py-3 text-center w-40 shadow-lg shadow-black/20 font-semibold bg-white outline-none placeholder:text-black/50 max-md:text-sm max-md:w-[100px]"
             />
