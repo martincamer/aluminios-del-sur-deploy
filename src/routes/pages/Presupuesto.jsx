@@ -47,6 +47,9 @@ export const Presupuesto = () => {
   const [precioKiloModenaA30, setPrecioKiloModenaA30] = useState(
     JSON.parse(localStorage.getItem("precio_kilo_modenaA30")) ?? 0
   );
+  const [precioKiloNatural, setPrecioKiloNatural] = useState(
+    JSON.parse(localStorage.getItem("precio_kilo_natural")) ?? 0
+  );
 
   const params = useParams();
 
@@ -72,6 +75,13 @@ export const Presupuesto = () => {
       JSON.stringify(precioKiloModenaA30)
     );
   }, [precioKiloModenaA30]);
+
+  useEffect(() => {
+    localStorage.setItem(
+      "precio_kilo_natural",
+      JSON.stringify(precioKiloNatural)
+    );
+  }, [precioKiloNatural]);
 
   //buscar perfil
   const searcher = (e) => {
@@ -212,6 +222,7 @@ export const Presupuesto = () => {
       );
     }, 0);
   };
+
   const totalKgModenaA30 = () => {
     return perfilEnviado.reduce((sum, b) => {
       return (
@@ -219,6 +230,19 @@ export const Presupuesto = () => {
         Number(
           clienteId[0]?.attributes?.nombre === b.cliente &&
             b.categoria == "modena a-30" &&
+            b.nuevoValor
+        )
+      );
+    }, 0);
+  };
+
+  const totalKgNatural = () => {
+    return perfilEnviado.reduce((sum, b) => {
+      return (
+        sum +
+        Number(
+          clienteId[0]?.attributes?.nombre === b.cliente &&
+            b.categoria == "natural" &&
             b.nuevoValor
         )
       );
@@ -259,7 +283,8 @@ export const Presupuesto = () => {
   const TOTALPAGAR =
     precioKiloHerrero * totalKgHerrero() +
     precioKiloModena * totalKgModena() +
-    precioKiloModenaA30 * totalKgModenaA30();
+    precioKiloModenaA30 * totalKgModenaA30() +
+    precioKiloNatural * totalKgNatural();
 
   return (
     <div className="py-[150px] px-2 max-md:py-[60px]">
@@ -669,6 +694,19 @@ export const Presupuesto = () => {
           </div>
           <div className="flex gap-3 items-center">
             <label className="font-semibold text-normal text-white max-md:text-sm">
+              Precio de kilo natural:
+            </label>
+            <input
+              min="1"
+              value={precioKiloNatural}
+              onChange={(e) => setPrecioKiloNatural(e.target.value)}
+              step="0.001"
+              type="number"
+              className="px-0 text-center shadow-lg shadow-black/20 font-semibold bg-white w-40 py-3 max-md:text-sm max-md:w-[100px]"
+            />
+          </div>
+          <div className="flex gap-3 items-center">
+            <label className="font-semibold text-normal text-white max-md:text-sm">
               Total a pagar:
             </label>
 
@@ -687,6 +725,7 @@ export const Presupuesto = () => {
                     precioKiloHerrero={precioKiloHerrero}
                     precioKiloModena={precioKiloModena}
                     precioKiloModenaA30={precioKiloModenaA30}
+                    precioKiloNatural={precioKiloNatural}
                     perfilEnviado={perfilEnviado}
                     clienteId={clienteId}
                     perfil={perfilId}

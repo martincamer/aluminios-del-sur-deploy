@@ -17,6 +17,7 @@ export const PdfPerfilPresupusto = ({
   precioKiloHerrero,
   precioKiloModena,
   precioKiloModenaA30,
+  precioKiloNatural,
   perfilEnviado,
   clienteId,
 }) => {
@@ -413,23 +414,15 @@ export const PdfPerfilPresupusto = ({
                 fontSize: "12px",
               }}
             >
+              Precio Kg Natural: ${precioKiloNatural.toLocaleString("arg")}
+            </Text>
+            <Text
+              style={{
+                fontSize: "12px",
+              }}
+            >
               Total de Kg: {totalKilos().toLocaleString("arg")} kg
             </Text>
-            {/* <Text
-							style={{
-								fontSize: '12px',
-							}}
-						>
-							Total de Kilos Modena:{' '}
-							{clienteId[0]?.attributes.total_kilos_modena} kg
-						</Text>
-						<Text
-							style={{
-								fontSize: '12px',
-							}}
-						>
-							Total de Kilos Modena a-30:{' '}
-						</Text> */}
           </View>
           <View>
             <Text
