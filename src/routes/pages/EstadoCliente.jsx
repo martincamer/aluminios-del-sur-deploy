@@ -147,13 +147,25 @@ export const EstadoCliente = () => {
                       {i.attributes.nombre} {i.attributes.apellido}
                     </th>
                     <th className="text-xs p-2 border-r-[2px] border-black text-white">
-                      ${i.attributes.total_pagar?.toLocaleString("arg") || 0}
+                      {i.attributes.total_pagar?.toLocaleString("es-ar", {
+                        style: "currency",
+                        currency: "ARS",
+                        minimumFractionDigits: 2,
+                      }) || 0}
                     </th>
                     <th className="text-xs p-2 border-r-[2px] border-black text-white">
-                      ${i.attributes.entrega?.toLocaleString("arg") || 0}
+                      {i.attributes.entrega?.toLocaleString("es-ar", {
+                        style: "currency",
+                        currency: "ARS",
+                        minimumFractionDigits: 2,
+                      }) || 0}
                     </th>
                     <th className="text-xs p-2 border-r-[2px] border-black text-white">
-                      ${i.attributes.total_pagar?.toLocaleString("arg") || 0}
+                      {i.attributes.total_pagar?.toLocaleString("es-ar", {
+                        style: "currency",
+                        currency: "ARS",
+                        minimumFractionDigits: 2,
+                      }) || 0}
                     </th>
                     <th className="text-xs p-2 border-r-[2px] border-black text-white">
                       {i.attributes.localidad}

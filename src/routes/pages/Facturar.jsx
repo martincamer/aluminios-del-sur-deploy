@@ -16,6 +16,7 @@ export const Facturar = () => {
   const [error, setError] = useState(false);
   const [search, setSearch] = useState([]);
   const [obtenerId, setObtenerId] = useState(null);
+  const [obtenerPerfilId, setObtenerPerfilId] = useState(null);
   const [modal, setModal] = useState(false);
   const [editarModal, setEditarModal] = useState(false);
   const [perfilSeleccionado, setPerfilSeleccionado] = useState([]);
@@ -142,7 +143,7 @@ export const Facturar = () => {
       const res = await axios.get(
         `${
           import.meta.env.VITE_API_URL
-        }/perfils?populate=*&filters[id]=${obtenerId}`
+        }/perfils?populate=*&filters[id]=${obtenerPerfilId}`
       );
       setEditarPerfil(res.data.data);
 
@@ -155,7 +156,7 @@ export const Facturar = () => {
     }
 
     load();
-  }, [obtenerId]);
+  }, [obtenerPerfilId]);
 
   const handleModal = () => {
     setModal(!modal);
@@ -163,6 +164,10 @@ export const Facturar = () => {
 
   const handlePerfilSeleccionadoId = (id) => {
     setObtenerId(id);
+  };
+
+  const handlePerfilSeleccionado = (id) => {
+    setObtenerPerfilId(id);
   };
 
   //Actualizar put clientes enviar datos
@@ -316,17 +321,20 @@ export const Facturar = () => {
 
   const onEditPerfilSeleccionado = handleSubmit(
     async ({ codigo, color, categoria, barras, kg, slug, cliente }) => {
-      await axios.put(`${import.meta.env.VITE_API_URL}/perfils/${obtenerId}`, {
-        data: {
-          codigo: codigo,
-          color: color,
-          categoria: categoria,
-          barras: barras,
-          kg: kg,
-          slug: slug,
-          cliente: cliente,
-        },
-      });
+      await axios.put(
+        `${import.meta.env.VITE_API_URL}/perfils/${obtenerPerfilId}`,
+        {
+          data: {
+            codigo: codigo,
+            color: color,
+            categoria: categoria,
+            barras: barras,
+            kg: kg,
+            slug: slug,
+            cliente: cliente,
+          },
+        }
+      );
 
       toast.success("Editado satifactoriamente!", {
         position: "top-right",
@@ -525,6 +533,9 @@ export const Facturar = () => {
                               Detalle
                             </th>
                             <th className="text-sm border-gray-900 border-2 py-2 px-[3px]">
+                              ID
+                            </th>
+                            <th className="text-sm border-gray-900 border-2 py-2 px-[3px]">
                               Adjuntar perfil
                             </th>
                           </>
@@ -555,6 +566,9 @@ export const Facturar = () => {
                               </th>
                               <th className="text-[13px] p-2 border-r-[2px] border-black text-white capitalize">
                                 {i.attributes.nombre}
+                              </th>
+                              <th className="text-[13px] p-2 border-r-[2px] border-black text-white capitalize">
+                                {i.id}
                               </th>
                               <th className="text-sm p-2 border-r-[2px] border-black text-white">
                                 <div
@@ -863,7 +877,7 @@ export const Facturar = () => {
                               className="text-yellow-500 text-3xl hover:scale-[1.05] hover:text-yellow-600 transition-all ease-in-out"
                               onClick={() => {
                                 {
-                                  handlePerfilSeleccionadoId(p.id),
+                                  handlePerfilSeleccionado(p.id),
                                     setEditarModal(!editarModal);
                                 }
                               }}

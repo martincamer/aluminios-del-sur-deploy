@@ -119,7 +119,11 @@ export const Clientes = () => {
                       {i.attributes.nombre} {i.attributes.apellido}
                     </th>
                     <th className="text-xs p-2 text-white border-r-[2px] border-black">
-                      ${i.attributes.total_pagar.toLocaleString("arg")}
+                      {i.attributes.total_pagar.toLocaleString("es-ar", {
+                        style: "currency",
+                        currency: "ARS",
+                        minimumFractionDigits: 2,
+                      })}
                     </th>
                     <th className="text-xs p-2 text-white border-r-[2px] border-black">
                       {i.attributes.barras}
@@ -128,7 +132,9 @@ export const Clientes = () => {
                       {/* {i.attributes.total_kilos_herrero +
 												i.attributes.total_kilos_modena +
 												i.attributes.total_kilos_modena_a30} */}{" "}
-                      {i.attributes.kilos.toLocaleString("arg")}
+                      {i.attributes.kilos.toLocaleString("es-ar", {
+                        minimumFractionDigits: 2,
+                      })}
                     </th>
                     <th className="text-xs p-2 text-white border-r-[2px] border-black">
                       {i.attributes.localidad}
